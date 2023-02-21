@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Vernier_Caliper12225246 KHUDOYBERDIEV MADAMINBEK PULAT UGLI_(마다민벡)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Vernier_Caliper12225246 KHUDOYBERDIEV MADAMINBEK PULAT UGLI_(마다민벡)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+	<input type="button" onclick="javascript:display_Q3();" value="Q-4" /> &emsp;
+&#8592; Select one button and click it. &nbsp; <input type="button" id="pauseBtn" value="help" onclick="displayHelp();">
+Caliper: <select id="meter">
+  <option value="disable">disable</option>
+  <option value="able">able</option>
+</select>
+Sample: <select id="sample">
+  <option value="none">None</option>
+  <option value="width">Width</option>
+  <option value="height">Height</option>
+</select>
+Shape: <select id="shape">
+  <option value="rect">Rectangle</option>
+  <option value="oval">Oval</option>
+</select><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Find the reading of the Vernier caliper below. </p>';
+var meter = document.getElementById("meter");
+meter.value="disable";
+meter.setAttribute("disabled",true);
+var sample = document.getElementById("sample");
+sample.value="none";
+sample.setAttribute("disabled",true);
+document.getElementById("shape").value="rect";
+document.getElementById("shape").setAttribute("disabled",true);
+layout([-5, 164, 40, 43]);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Find the zero-error of the Vernier caliper below. </p>';
+var meter = document.getElementById("meter");
+meter.value="able";
+meter.setAttribute("disabled",true);
+var sample = document.getElementById("sample");
+sample.value="none";
+sample.setAttribute("disabled",true);
+document.getElementById("shape").value="rect";
+document.getElementById("shape").setAttribute("disabled",true);
+layout([5, 105, 62, 87]);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Find the area of the sample below. Do not forget the zero-error of the Vernier caliper. </p>';
+var meter = document.getElementById("meter");
+meter.value="able";
+meter.setAttribute("disabled",true);
+var sample = document.getElementById("sample");
+sample.value="width";
+sample.removeAttribute("disabled");
+document.getElementById("shape").value="rect";
+document.getElementById("shape").setAttribute("disabled",true);
+layout([-2, 175, 55, 92]);
+}
+
+function display_Q3() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">4. Find the area of the sample below. Do not forget the zero-error of the Vernier caliper. </p>';
+var meter = document.getElementById("meter");
+meter.value="able";
+meter.setAttribute("disabled",true);
+var sample = document.getElementById("sample");
+sample.value="width";
+sample.removeAttribute("disabled");
+document.getElementById("shape").value="oval";
+document.getElementById("shape").setAttribute("disabled",true);
+layout([-4, 132, 45, 53]);
+}
+
+function layout(iValues) {
+ //iValues[0]=0;
+ //iValues[1]=0;
+ var dragging=false,
+  mouseX=0,
+  mouseY=0;
+
+ var jaws={L: iValues[0], R: iValues[1]};
+ var sample={w: iValues[2], h: iValues[3]};
+ if (document.getElementById("sample").value=="none") {
+  sample.w=0; sample.h=0;
+ }
+
+ document.getElementById("sample").addEventListener("change", function() {
+  if (document.getElementById("sample").value=="none") {sample.w=0; sample.h=0;}
+  else if (document.getElementById("sample").value=="width") {sample.w=iValues[2]; sample.h=iValues[3];}
+  else {sample.w=iValues[3]; sample.h=iValues[2];}
+
+  jaws = drawAll(jaws, sample, 0);
+  });
+
+
+ cnvs.ontouchend = function(e) {
+  e.preventDefault();
+  dragging=false;
+ }
+
+ cnvs.onmouseup = function(e) {
+  e.preventDefault();
+  dragging=false;
+ }
+
+ cnvs.ontouchstart = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.touches[0].clientY-bbox.top*(ch/bbox.height);
+  
+  if (document.getElementById("meter").value == "able") {
+   //ctx.fillStyle="black";
+   //ctx.font="normal 20px Palatino Linotype";
+   //ctx.textAlign="center";
+   //ctx.clearRect(50,530,500,620);
+   //ctx.fillText(jaws.L+", "+jaws.R+", "+pxX+", "+pxY, 200,600);
+   if (232 < pxY && pxY < 296 && jaws.R+130<pxX && pxX<jaws.R+330) {
+    dragging=true;
+    mouseX=pxX;
+    mouseY=pxY;
+   }
+  }
+ }
+
+ cnvs.onmousedown = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+  
+  if (document.getElementById("meter").value == "able") {
+   //ctx.fillStyle="black";
+   //ctx.font="normal 20px Palatino Linotype";
+   //ctx.textAlign="center";
+   //ctx.clearRect(50,530,500,620);
+   //ctx.fillText(jaws.L+", "+jaws.R+", "+pxX+", "+pxY, 200,600);
+   if (232 < pxY && pxY < 296 && jaws.R+130<pxX && pxX<jaws.R+330) {
+    dragging=true;
+    mouseX=pxX;
+    mouseY=pxY;
+   }
+  }
+ }
+
+ cnvs.ontouchmove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.touches[0].clientY-bbox.top*(ch/bbox.height);
+
+  if (dragging == true && 232 < pxY && pxY < 296 && jaws.R+130<pxX && pxX<jaws.R+330 && jaws.L+sample.w <= jaws.R+pxX-mouseX) {
+   jaws = drawAll(jaws, sample, pxX-mouseX);
+   mouseX = pxX;
+   //ctx.fillStyle="black";
+   //ctx.font="normal 40px Palatino Linotype";
+   //ctx.textAlign="center";
+   //ctx.clearRect(0,530,600,620);
+   //ctx.fillText(jaws.L+", "+jaws.R+", "+pxX, 200,600);
+  }
+ }
+
+ cnvs.onmousemove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+
+  if (dragging == true && 232 < pxY && pxY < 296 && jaws.R+130<pxX && pxX<jaws.R+330 && jaws.L+sample.w <= jaws.R+pxX-mouseX) {
+   jaws = drawAll(jaws, sample, pxX-mouseX);
+   mouseX = pxX;
+   //ctx.fillStyle="black";
+   //ctx.font="normal 40px Palatino Linotype";
+   //ctx.textAlign="center";
+   //ctx.clearRect(0,530,600,620);
+   //ctx.fillText(jaws.L+", "+jaws.R+", "+pxX, 200,600);
+  }
+ }
+ 
+ jaws = drawAll(jaws, sample, 0);
+
+ //ctx.fillStyle="black";
+ //ctx.font="normal 20px Palatino Linotype";
+ //ctx.fillText(iValues, 80, 15);
+}
+
+function drawAll(jaws, sample, xtra){
+ ctx.clearRect(0,0,cw,ch);
+ var cX=cw/2, cY=ch/2, bg="white";
+ var jawL=jaws.L, jawR=jaws.R+xtra;
+
+ // right jaw top part
+ ctx.beginPath();
+ ctx.fillStyle="#ccc";
+ ctx.moveTo(jawR+85,120); 
+ ctx.ellipse(jawR+120, 120, 35, 90, 0, Math.PI, 3*Math.PI/2);
+ ctx.lineTo(jawR+120,120);
+ ctx.lineTo(jawR+105,120);
+ ctx.lineTo(jawR+105,125);
+ ctx.lineTo(jawR+330,125);
+ ctx.lineTo(jawR+330,200);
+ ctx.lineTo(jawR+85,200);
+ ctx.lineTo(jawR+85,120);
+ ctx.fill();
+
+ // left jaw
+ ctx.beginPath();
+ ctx.fillStyle="#a3c2c2";
+ ctx.moveTo(120+jawL,120);
+ ctx.ellipse(120+jawL, 120, 35, 90, 0, Math.PI*3/2, 2*Math.PI);
+ ctx.lineTo(155+jawL,120);
+ ctx.lineTo(155+jawL,150);
+ ctx.lineTo(990+jawL,150);
+ ctx.lineTo(990+jawL,240);
+ ctx.lineTo(110+jawL,240);
+ ctx.lineTo(110+jawL,320);
+ ctx.lineTo(120+jawL,320);
+ ctx.lineTo(120+jawL,430);
+ ctx.ellipse(120+jawL,430, 50, 50, 0, Math.PI/2, Math.PI);
+ ctx.lineTo( 70+jawL,430);
+ ctx.lineTo( 30+jawL,250);
+ ctx.lineTo( 30+jawL,125);
+ ctx.lineTo(140+jawL,125);
+ ctx.lineTo(140+jawL,120);
+ ctx.closePath();
+ ctx.fill();
+
+ // scales on left jaw
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.fillStyle="black";
+ ctx.font="normal 14px Palatino Linotype";
+ ctx.textAlign="center";
+ var x;
+ for (var i=0; i<81; i++) {
+  x=150.5+i*10;
+  ctx.moveTo(x,238);
+  if (i%10 == 0) {
+   ctx.lineTo(x,195);
+   ctx.fillText(i, x, 190);
+  }
+  else if (i%5 == 0) ctx.lineTo(x,205);
+  else ctx.lineTo(x,215);
+  ctx.stroke();
+ }
+
+ // right jaw top part #2
+ ctx.beginPath();
+ ctx.fillStyle="#ccc";
+ ctx.fillRect(jawR+190,130,140,40);
+
+ // right jaw bottom part
+ ctx.beginPath();
+ ctx.moveTo(jawR+130,230);
+ ctx.lineTo(jawR+330,230);
+ ctx.lineTo(jawR+330,300);
+ ctx.lineTo(jawR+199,300);
+ ctx.lineTo(jawR+170,430);
+ ctx.ellipse(jawR+120,430, 50, 50, 0, 0, Math.PI/2);
+ ctx.lineTo(jawR+120,430);
+ ctx.lineTo(jawR+120,320);
+ ctx.lineTo(jawR+130,320);
+ ctx.fill();
+
+ // scales on bottom jaw
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.fillStyle="black";
+ ctx.font="normal 14px Palatino Linotype";
+ ctx.fillText("(0.1 mm)", jawR+295.5, 295);
+ ctx.font="normal 10px Palatino Linotype";
+ ctx.textAlign="center";
+ for (var i=0; i<11; i++) {
+  x=jawR+150.5+i*9;
+  ctx.moveTo(x,230);
+  ctx.lineTo(x,250);
+  ctx.fillText(i, x,260);
+  ctx.stroke();
+ }
+ 
+ if (document.getElementById("sample").value !="none") {
+  ctx.beginPath();
+  ctx.fillStyle="goldenrod";
+  if (document.getElementById("shape").value =="rect") ctx.fillRect(120+jaws.L, 375.5-sample.h/2, sample.w, sample.h);
+  else {
+   ctx.ellipse(120+jaws.L+sample.w/2, 375.5-sample.h/2+sample.h/2, sample.w/2, sample.h/2,0,0,2*Math.PI);
+   ctx.fill();
+  }
+ }
+
+ jaws.R = jawR;
+ return jaws
+}
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work is different.";
+msg += "\n3. The jaw with Vernier scale moves back and force with the vernier scale.";
+msg += "\n4. To move the Vernier scale, press down the mouse on the vernier scale and move the mouse while it is inside scale.";
+alert(msg);
+}
+
+
+drawAll({L: 0, R: 0}, {w: 0, h: 0}, 0);
+ctx.beginPath();
+ctx.fillStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+//ctx.fillText("Welcome to the Virtual Lab for Vernier Caliper", cw/2, ch/2);
+//ctx.fillText("Integrated System & Engineering", cw/2, ch/2+50);</script>\n</body>\n</html>
