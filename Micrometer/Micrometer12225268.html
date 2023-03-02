@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Micrometer12225268 NIMATILAEV JAVOKHIR IZATILLO UGLI_(자버히르)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Micrometer12225268 NIMATILAEV JAVOKHIR IZATILLO UGLI_(자버히르)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+	<input type="button" onclick="javascript:display_Q3();" value="Q-4" /> &emsp;
+&#8592; Select one button on the left. &nbsp; <input type="button" id="pauseBtn" value="help" onclick="displayHelp();">
+Micrometer: <select id="meter">
+  <option value="disable">disable</option>
+  <option value="able">able</option>
+</select>
+Sample: <select id="sample">
+  <option value="none">None</option>
+  <option value="width">Width</option>
+  <option value="height">Height</option>
+</select>
+Shape: <select id="shape">
+  <option value="rect">Rectangle</option>
+  <option value="oval">Oval</option>
+</select><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Find the reading of the micrometer below. </p>';
+var meter = document.getElementById("meter");
+meter.value="disable";
+meter.setAttribute("disabled",true);
+var sample = document.getElementById("sample");
+sample.value="none";
+sample.setAttribute("disabled",true);
+document.getElementById("shape").value="rect";
+document.getElementById("shape").setAttribute("disabled",true);
+layout([3.3, 111.4, 46.8, 65.9]);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Find the zero error of the micrometer below. </p>';
+var meter = document.getElementById("meter");
+meter.value="able";
+meter.setAttribute("disabled",true);
+var sample = document.getElementById("sample");
+sample.value="none";
+sample.setAttribute("disabled",true);
+document.getElementById("shape").value="rect";
+document.getElementById("shape").setAttribute("disabled",true);
+layout([1.1, 177.9, 88.8, 46.1]);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Find the area, width multiplied by the height, of the sample below. Do not forget the zero error of the micrometer. </p>';
+var meter = document.getElementById("meter");
+meter.value="able";
+meter.setAttribute("disabled",true);
+var sample = document.getElementById("sample");
+sample.value="width";
+sample.removeAttribute("disabled");
+document.getElementById("shape").value="rect";
+document.getElementById("shape").setAttribute("disabled",true);
+layout([-2.6, 159.3, 71.5, 70.3]);
+}
+
+function display_Q3() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">4. Find the area of the oval sample below. Do not forget the zero error of the micrometer. </p>';
+var meter = document.getElementById("meter");
+meter.value="able";
+meter.setAttribute("disabled",true);
+var sample = document.getElementById("sample");
+sample.value="width";
+sample.removeAttribute("disabled");
+document.getElementById("shape").value="oval";
+document.getElementById("shape").setAttribute("disabled",true);
+layout([-4.7, 188.0, 97.3, 29.4]);
+}
+
+drawAll({L: 60, R: 60},{w: 0, h: 0}, 0);
+ctx.beginPath();
+ctx.fillStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Lab for Micrometer", cw/2, ch/2);
+ctx.fillText("Integrated System & Engineering", cw/2, ch/2+50);
+
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work is different, and the thimble of the micrometer is locked for some works.";
+msg += "\n3. The spindle of the micrometer moves as the thimble is rotated.";
+msg += "\n4. To rotate the thimble, press down the mouse on the thimble head and move the mouse while it is inside thimble.";
+alert(msg);
+}
+
+function layout(iValues) {
+ var dragging=false, mouseX=0, mouseY=0;
+ var faces={L: 60+iValues[0], R: 60+iValues[1]};
+ var sample={w: iValues[2], h: iValues[3]};
+ if (document.getElementById("sample").value=="none") {
+  sample.w=0;
+  sample.h=0;
+ }
+
+ document.getElementById("sample").addEventListener("change", function() {
+  if (document.getElementById("sample").value=="none") {
+   sample.w=0;
+   sample.h=0;
+  }
+  else if (document.getElementById("sample").value=="width") {
+   sample.w=iValues[2];
+   sample.h=iValues[3];
+  }
+  else {
+   sample.w=iValues[3];
+   sample.h=iValues[2];
+  }
+  faces = drawAll(faces, sample, 0);
+  });
+
+ cnvs.onmousedown = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+  
+  if (document.getElementById("meter").value == "able") {
+   //ctx.fillStyle="black";
+   //ctx.font="normal 20px Palatino Linotype";
+   //ctx.textAlign="center";
+   //ctx.clearRect(50,430,500,520);
+   //ctx.fillText(faceL+", "+faceR+", "+pxX+", "+pxY, 200,500);
+   if (35 < pxY && pxY < 125) {
+    dragging=true;
+    mouseX=pxX;
+    mouseY=pxY;
+   }
+  }
+ }
+
+ cnvs.ontouchstart = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.touches[0].clientY-bbox.top*(ch/bbox.height);
+  
+  if (document.getElementById("meter").value == "able") {
+   if (35 < pxY && pxY < 125) {
+    dragging=true;
+    mouseX=pxX;
+    mouseY=pxY;
+   }
+  }
+ }
+
+
+ cnvs.onmouseup = function(e) {
+  e.preventDefault();
+  dragging=false;
+ }
+
+ cnvs.ontouchend = function(e) {
+  e.preventDefault();
+  dragging=false;
+ }
+
+
+ cnvs.onmousemove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+
+  if (dragging == true && 35 < pxY && pxY < 125 && faces.R+390 < pxX && pxX < faces.R+510 && faces.L+sample.w<=faces.R+(pxY-mouseY)/10) {
+   faces = drawAll(faces, sample, pxY-mouseY);
+   mouseY = pxY;
+   //ctx.fillStyle="black";
+   //ctx.font="normal 40px Palatino Linotype";
+   //ctx.textAlign="center";
+   //ctx.clearRect(0,530,600,620);
+   //ctx.fillText(faceL+", "+faceR, 200,600);
+  }
+ }
+
+ cnvs.ontouchmove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.touches[0].clientY-bbox.top*(ch/bbox.height);
+
+  if (dragging == true && 35 < pxY && pxY < 125 && faces.R+390 < pxX && pxX < faces.R+510 && faces.L+sample.w<=faces.R+(pxY-mouseY)/10) {
+   faces = drawAll(faces, sample, pxY-mouseY);
+   mouseY = pxY;
+   //ctx.fillStyle="black";
+   //ctx.font="normal 40px Palatino Linotype";
+   //ctx.textAlign="center";
+   //ctx.clearRect(0,530,600,620);
+   //ctx.fillText(faceL+", "+faceR, 200,600);
+  }
+ }
+
+
+ 
+ faces = drawAll(faces, sample, 0);
+
+ //ctx.fillStyle="black";
+ //ctx.font="normal 20px Palatino Linotype";
+ //ctx.fillText(iValues, 5, 15);
+}
+
+function drawAll(faces, sample, xtra){
+ ctx.clearRect(0,0,cw,ch);
+ var cX=cw/2, cY=ch/2, bg="white";
+ thimbleX=faces.R+290.5;
+
+ var gradient=ctx.createLinearGradient(0, 35, 0, 125);
+ gradient.addColorStop(0, "#777");
+ gradient.addColorStop(0.5, "white");
+ gradient.addColorStop(1, "#777");
+
+
+ //ctx.beginPath();
+ //ctx.fillStyle="black";
+ //ctx.font="normal 80px Palatino Linotype";
+ //ctx.fillText("cX="+cX.toFixed(1)+" cY="+cY.toFixed(1), cX, cY);
+ //ctx.textAlign="center";
+ //ctx.fillText(iValues, cX, cY);
+
+ // left face
+ ctx.beginPath();
+ ctx.fillStyle="brown";
+ ctx.fillRect(50,70,faces.L-50,20);
+ 
+ if (document.getElementById("sample").value !="none") {
+  ctx.beginPath();
+  ctx.fillStyle="goldenrod";
+  if (document.getElementById("shape").value =="rect") ctx.fillRect(faces.L, 80-sample.h/2, sample.w, sample.h);
+  else {
+   ctx.ellipse(faces.L+sample.w/2, 80-sample.h/2+sample.h/2, sample.w/2, sample.h/2,0,0,2*Math.PI);
+   ctx.fill();
+  }
+ }
+
+ // right face
+ //rightFace=Number(document.getElementById("RightFace").value);
+ //rightFace=iValues[1];
+ //ctx.fillText(rightFace, cX, cY);
+ //rightFace += 60;
+ ctx.beginPath();
+ ctx.fillStyle="brown";
+ ctx.fillRect(faces.R,70,300,20);
+
+ ctx.beginPath();
+ ctx.fillStyle="#777";
+ ctx.strokeStyle=bg;
+ ctx.moveTo(30,50); ctx.lineTo(27,53); ctx.lineTo(27,107); ctx.lineTo(30,110); ctx.lineTo(50,110);
+ ctx.lineTo(53,107); ctx.lineTo(53, 53); ctx.lineTo(50, 50); ctx.closePath();
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.fillStyle="#777";
+ ctx.strokeStyle=bg;
+ ctx.moveTo(280,50); ctx.lineTo(277,53); ctx.lineTo(277,107); ctx.lineTo(280,110); ctx.lineTo(340,110);
+ ctx.lineTo(343,107); ctx.lineTo(343, 53); ctx.lineTo(340, 50); ctx.closePath();
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.fillStyle="#777";
+ ctx.strokeStyle=bg;
+ ctx.arc(185,110, 150, 0, Math.PI);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.fillStyle=bg;
+ ctx.strokeStyle=bg;
+ ctx.arc(165,110, 120, 0, Math.PI); ctx.fill();
+ ctx.stroke();
+
+ // barrel
+ ctx.beginPath();
+ ctx.strokeStyle="#aaa";
+ //ctx.fillStyle="#eee";
+ ctx.fillStyle=gradient;
+ ctx.rect(343, 55, 213, 50);
+ ctx.stroke();
+ ctx.fill();
+
+ // scales on barrel
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.moveTo(345,85.5);
+ ctx.lineTo(560,85.5);
+ ctx.stroke();
+
+ ctx.fillStyle="black";
+ ctx.font="normal 12px Palatino Linotype";
+ ctx.textAlign="center";
+ for(var x=-5; x<210; x++){
+  if (x%10 == 0) {
+   ctx.moveTo(350.5+x, 85.5);
+   if (x%50 == 0) {
+    ctx.fillText(parseInt(x/10), 350+x, 73);
+    ctx.lineTo(350.5+x, 75.5);
+   }
+   else ctx.lineTo(350.5+x, 80.5);
+   ctx.stroke();
+  }
+  else if (x%5 == 0) {
+   ctx.moveTo(350.5+x, 85.5);
+   ctx.lineTo(350.5+x, 90.5);
+   ctx.stroke();
+  }
+ }
+
+ // thimble
+ ctx.beginPath();
+ ctx.strokeStyle="#777";
+ ctx.fillStyle="#ddd";
+ ctx.moveTo(thimbleX,45.5);
+ ctx.lineTo(thimbleX,115.5);
+ ctx.lineTo(thimbleX+100, 125.5);
+ ctx.lineTo(thimbleX+100, 35.5);
+ ctx.closePath();
+ ctx.fill()
+ ctx.stroke();
+
+ ctx.fillStyle=gradient;
+ ctx.rect(thimbleX+100, 35.5, 120, 90);
+ ctx.fill()
+ ctx.stroke();
+
+ ctx.rect(thimbleX+220, 65.5, 15, 30);
+ ctx.fill()
+ ctx.stroke();
+
+ ctx.rect(thimbleX+235, 60.5, 40, 40);
+ ctx.fill()
+ ctx.stroke();
+
+ // scales on thimble
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.textAlign="left";
+ ctx.font="normal 12px Palatino Linotype";
+ ctx.strokeStyle="black";
+
+ // 100 pixles = 10 mm -> 10 pixels: 1 mm : 10 pixels up/down : 1 pixel left/right : 0.1 mm
+ var fraction = (faces.R+xtra/10)%10; // when thimbleX=390, 간격=0
+ var centerV=parseInt(10*fraction);
+ if (centerV<0) centerV += 50;
+ if (centerV>45) centerV -= 50;
+ 
+ var v=0, j=0;
+ for (var i=0; i<13; i++) {
+  v = 7-i+centerV;
+  if (v == 50) v = 0;
+  else if (v == -5) v = 45;
+  else if (v == 55) v = 5;
+
+  j = i*5+50;
+  ctx.moveTo(thimbleX, j+0.5);
+  if (v%5 == 0) {
+   ctx.lineTo(thimbleX+30,j+0.5);
+   ctx.fillText(v, thimbleX+35, j+5);
+  }
+  else ctx.lineTo(thimbleX+20,j+0.5);
+  ctx.stroke();
+ }
+ ctx.fillText("0.01 mm", thimbleX+150, 120);
+
+ faces.R = parseFloat((faces.R+xtra/10).toFixed(2));
+ return faces
+}</script>\n</body>\n</html>
