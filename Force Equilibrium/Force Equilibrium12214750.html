@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Force Equilibrium12214750 MATYAKUBOV AZIZBEK YORKINBEK UGLI_(아지즈벡)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Force Equilibrium12214750 MATYAKUBOV AZIZBEK YORKINBEK UGLI_(아지즈벡)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+&#8592; Select one button on the left. 
+Decimal point place: <select id="sensitivity">
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+</select>
+F<sub>1</sub> (N): <input type="number" id="F1" value=0 STYLE="color: #ff0000; font-size:18px;" min=5 max=36>
+F<sub>2</sub> (N): <input type="number" id="F2" value=0 STYLE="color: #00ff00; font-size:18px;" min=5 max=36>
+F<sub>3</sub> (N): <input type="number" id="F3" value=0 STYLE="color: #0000ff; font-size:18px;" min=5 max=36>
+<input type="button" id="pauseBtn" value="help" onclick="displayHelp();"> <a href="https://physics.unc.edu/wp-content/uploads/sites/218/2013/05/10-Equilibrium-of-Forces.pdf" target="_blank">Equilibrium of forces acting at a point</a>&emsp;
+<a href="https://brython.info/tests/editor.html?lang=en" target="_blank">Brython</a><br><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Find the correct force and the corresponding angle of <font color="blue">blue</font> weight to balance the three weights. The net force must be zero in 2 decimal point places. </p>';
+var f1 = document.getElementById("F1");
+f1.setAttribute("value",18);
+f1.setAttribute("disabled",true);
+var f2 = document.getElementById("F2");
+f2.setAttribute("value",22);
+f2.setAttribute("disabled",true);
+var f3 = document.getElementById("F3");
+f3.setAttribute("value",23);
+f3.removeAttribute("disabled");
+angles=[52, 176, 304];
+shapes=[];
+shapes.push( {x:300, y:300, radius:0, color:'red', move:false} );
+shapes.push( {x:0, y:300, radius:0, color:'green', move:false} );
+shapes.push( {x:-300, y:0, radius:0, color:'blue', move:true} );
+layout(angles, shapes);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Find the angles of <font color="red">red</font> and <font color="blue">blue</font> weights to balance the three weights fixed at their forces. The net force must be zero in 2 decimal point places. </p>';
+var f1 = document.getElementById("F1");
+f1.setAttribute("value",10);
+f1.setAttribute("disabled",true);
+var f2 = document.getElementById("F2");
+f2.setAttribute("value",17);
+f2.setAttribute("disabled", true);
+var f3 = document.getElementById("F3");
+f3.setAttribute("value",23);
+f3.setAttribute("disabled", true);
+angles=[50, 172, 297];
+shapes=[];
+shapes.push( {x:0, y:0, radius:0, color:'red', move:true} );
+shapes.push( {x:0, y:0, radius:0, color:'green', move:false} );
+shapes.push( {x:0, y:0, radius:0, color:'blue', move:true} );
+layout(angles, shapes);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Find the correct forces of <font color="red">red</font> and <font color="blue">blue</font> weights to balance the three weights fixed at their angles. The net force must be zero in 2 decimal point places. </p>';
+var f1 = document.getElementById("F1");
+f1.setAttribute("value",10);
+f1.removeAttribute("disabled");
+var f2 = document.getElementById("F2");
+f2.setAttribute("value",18);
+f2.setAttribute("disabled",true);
+var f3 = document.getElementById("F3");
+f3.setAttribute("value",19);
+f3.removeAttribute("disabled");
+angles=[32, 150, 274];
+shapes=[];
+shapes.push( {x:0, y:0, radius:0, color:'red', move:false} );
+shapes.push( {x:0, y:0, radius:0, color:'green', move:false} );
+shapes.push( {x:0, y:0, radius:0, color:'blue', move:false} );
+layout(angles, shapes);
+}
+
+var canvasImage, cX=cw/2, cY=ch/2, pR=Math.min(cX, cY)-60, mL=pR+30;
+var shapes=[];
+shapes.push( {x:0, y:0, radius:0, color:'red', move:false} );
+shapes.push( {x:0, y:0, radius:0, color:'green', move:false} );
+shapes.push( {x:0, y:0, radius:0, color:'blue', move:true} );
+var angles=[97, 130, 300];
+var forces=[10,11,12];
+var mouseX, mouseY, dragging=false, selectedShape=null;
+
+drawCircularPlate();
+
+drawAll();
+
+ctx.beginPath();
+ctx.fillStyle="pink";
+ctx.strokeStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Lab of Force Equilibrium", cw/2, ch/2);
+ctx.strokeText("Welcome to the Virtual Lab of Force Equilibrium", cw/2, ch/2);
+ctx.fillText("Integrated System & Engineering", cw/2, ch/2+50);
+
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work requires different task.";
+msg += "\n3. Weights can be changed by changing the value directly.";
+msg += "\n4. Press down the mouse on the weight to move and move the mouse while it is inside the weight.";
+msg += "\n5. Depending on the work, some weight are fixed in location.";
+msg += "\n6. The red ring at the center is the indicator of forces in equilibrium.";
+alert(msg);
+}
+
+
+function layout(angles, shapes) {
+ var F1=document.getElementById("F1").value;
+ var F2=document.getElementById("F2").value;
+ var F3=document.getElementById("F3").value;
+
+ forces=[F1, F2, F3];
+
+ for(let i=0;i<shapes.length;i++) {
+  shape=shapes[i];
+  rA=angles[i]*Math.PI/180;
+  cosA=Math.cos(rA);
+  sinA=Math.sin(rA);
+  shape.x=mL*cosA+cX;
+  shape.y=mL*sinA+cY;
+ }
+ shapes[0].radius=F1;
+ shapes[1].radius=F2;
+ shapes[2].radius=F3;
+
+
+ document.getElementById("F1").addEventListener("change", function() { forces[0]=document.getElementById("F1").value;
+ shapes[0].radius=forces[0];
+ drawAll();});
+
+ document.getElementById("F2").addEventListener("change", function() { forces[1]=document.getElementById("F2").value;
+ shapes[1].radius=forces[1];
+ drawAll();});
+
+ document.getElementById("F3").addEventListener("change", function() { forces[2]=document.getElementById("F3").value;
+ shapes[2].radius=forces[2];
+ drawAll();});
+
+ document.getElementById("sensitivity").addEventListener("change", function() { forces[0]=document.getElementById("F1").value;
+ shapes[0].radius=forces[0];
+ forces[1]=document.getElementById("F2").value;
+ shapes[1].radius=forces[1];
+ forces[2]=document.getElementById("F3").value;
+ shapes[2].radius=forces[2];
+ drawAll();});
+
+
+ cnvs.onmousedown = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+
+  var shape;
+  for (let i=0; i<3; i++) {
+   shape=shapes[i];
+   if ((shape.x-pxX)**2+(shape.y-pxY)**2<=shape.radius**2 && shape.move==true) {
+    mouseX=pxX;
+    mouseY=pxY;
+    dragging=true;
+    selectedShape=i;
+   }
+  }
+ }
+
+ cnvs.ontouchstart = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.touches[0].clientY-bbox.top*(ch/bbox.height);
+  
+  var shape;
+  for (let i=0; i<3; i++) {
+   shape=shapes[i];
+   if ((shape.x-pxX)**2+(shape.y-pxY)**2<=shape.radius**2 && shape.move==true) {
+    mouseX=pxX;
+    mouseY=pxY;
+    dragging=true;
+    selectedShape=i;
+   }
+  }
+ }
+
+ cnvs.onmouseup = function(e) {
+  e.preventDefault();
+  dragging=false;
+ }
+
+ cnvs.ontouchend = function(e) {
+  e.preventDefault();
+  dragging=false;
+ }
+
+ cnvs.onmousemove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+
+  var shape=shapes[selectedShape];
+  if (dragging==true && (shape.x-pxX)**2+(shape.y-pxY)**2<=shape.radius**2 && shape.move==true) {
+   var dA=(Math.atan2(mouseY-cY,mouseX-cX)-Math.atan2(pxY-cY,pxX-cX))*180/Math.PI;
+   angles[selectedShape] -= dA;
+
+   var A=angles[selectedShape]*Math.PI/180;
+   shape.x=mL*Math.cos(A)+cX;
+   shape.y=mL*Math.sin(A)+cY;
+
+   mouseX=pxX;
+   mouseY=pxY;
+
+   drawAll();
+  }
+ }
+
+ cnvs.ontouchmove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.touches[0].clientY-bbox.top*(ch/bbox.height);
+
+  if (dragging==true && (shape.x-pxX)**2+(shape.y-pxY)**2<=shape.radius**2 && shape.move==true) {
+   var dA=(Math.atan2(mouseY-cY,mouseX-cX)-Math.atan2(pxY-cY,pxX-cX))*180/Math.PI;
+   angles[selectedShape] -= dA;
+
+   var A=angles[selectedShape]*Math.PI/180;
+   shape.x=mL*Math.cos(A)+cX;
+   shape.y=mL*Math.sin(A)+cY;
+
+   mouseX=pxX;
+   mouseY=pxY;
+
+   drawAll();
+  }
+ }
+
+
+ drawAll();
+}
+
+
+function drawAll() {
+ ctx.putImageData(canvasImage,0,0);
+
+ var netFx, netFy, shape, rA, cosA, sinA, df, A, Fsens;
+ netFx=0;
+ netFy=0;
+
+ for(let i=0;i<shapes.length;i++){
+  shape=shapes[i];
+  ctx.beginPath();
+  ctx.strokeStyle=shape.color;
+  ctx.moveTo(cX,cY);
+  rA=angles[i]*Math.PI/180;
+  cosA=Math.cos(rA);
+  sinA=Math.sin(rA);
+
+  netFx += forces[i]*cosA;
+  netFy += forces[i]*sinA;
+  ctx.lineTo(mL*cosA+cX, mL*sinA+cY);
+  ctx.stroke();
+
+  ctx.beginPath();
+  //ctx.arc(shape.x,shape.y,forces[i],0,Math.PI*2);
+  ctx.arc(mL*cosA+cX, mL*sinA+cY, forces[i], 0, 2*Math.PI);
+  ctx.fillStyle=shape.color;
+  ctx.fill();
+ }
+
+ deciN=document.getElementById("sensitivity").value;
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.textAlign="left";
+ ctx.font="normal 20px Palatino Linotype";
+ ctx.fillText("Net Fx="+netFx.toFixed(deciN)+" N,  Net Fy="+netFy.toFixed(deciN)+" N", 10, 20);
+
+ df=Math.sqrt(Math.pow(netFx,2)+Math.pow(netFy,2));
+ A=Math.PI-Math.atan2(netFy, netFx), cosA=20*Math.cos(A), sinA=20*Math.sin(A);
+ Fsens=0.5
+
+ if(df<Fsens) {
+  cosA *= (df/Fsens);
+  sinA *= (df/Fsens);
+ }
+
+ //drawRing();
+ ctx.beginPath();
+ ctx.strokeStyle="red";
+ ctx.fillStyle="white";
+ ctx.arc(cX-cosA, cY+sinA, 20, 0, 2*Math.PI);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.arc(cX, cY, 2, 0, 2*Math.PI);
+ ctx.stroke();
+}
+
+
+function drawCircularPlate() {
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.arc(cX, cY, pR, 0, 2*Math.PI);
+ ctx.stroke();
+ ctx.fillStyle="black";
+ ctx.font="normal 14px Palatino Linotype";
+
+ var rA, cosA, sinA;
+ for(let A=0; A<360; A++){
+  rA=A*Math.PI/180;
+  cosA=Math.cos(rA);
+  sinA=Math.sin(rA);
+  if (A%5 == 0) {
+   ctx.moveTo(pR*cosA+cX, pR*sinA+cY);
+   ctx.lineTo((pR-30)*cosA+cX, (pR-30)*sinA+cY);
+   ctx.stroke();
+   if (A%10 == 0) ctx.fillText(A, (pR-30)*cosA+cX-5, (pR-30)*sinA+cY+3);
+  }
+  else {
+   ctx.moveTo(pR*cosA+cX, pR*sinA+cY);
+   ctx.lineTo((pR-20)*cosA+cX, (pR-20)*sinA+cY);
+   ctx.stroke();
+  }
+ }
+ canvasImage=ctx.getImageData(0,0,cw,ch);
+}</script>\n</body>\n</html>
