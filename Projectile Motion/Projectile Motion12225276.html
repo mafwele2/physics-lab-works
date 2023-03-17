@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Projectile Motion12225276 OTAMIRZAEV FAYOZBEK FARKHODJON UGLI_(파여즈벡)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Projectile Motion12225276 OTAMIRZAEV FAYOZBEK FARKHODJON UGLI_(파여즈벡)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+	<input type="button" onclick="javascript:display_Q3();" value="Q-4" /> &emsp;
+	<input type="button" onclick="javascript:display_Q4();" value="Q-5" /> &emsp;
+&#8592; Click one on the left. &nbsp; <input type="button" id="pauseBtn" value="help" onclick="displayHelp();"> <a href="https://courses.lumenlearning.com/physics/chapter/3-4-projectile-mo target="_blank"tion/">Projectile motion of a fired cannon shell</a>&emsp;
+<a href="https://brython.info/tests/editor.html?lang=en" target="_blank">Brython</a><br>
+Height (cm):<input type="number" id="height" value=30 STYLE="font-size:18px;" min=10 max=900>
+Angle (&#176;):<input type="number" id="angle" value=0 STYLE="font-size:18px;" min=0 max=89>
+V<sub>o</sub> (cm/s):<input type="number" id="Vo" value=500 STYLE="font-size:18px;" min=0 max=2000>
+Fire: <input type="button" id="power" value="OFF" STYLE="background-color: #cce000;">
+Time Interval (ms): <input type="number" id="deltaT" value=20 STYLE="font-size:18px;" min=10 max=1000>
+Target: <select id="target">
+  <option value="none">None</option>
+  <option value="bucket">Bucket</option>
+</select><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Find the time the shell hit the ground (y = 0). </p>';
+document.getElementById("power").value="OFF";
+document.getElementById("height").setAttribute("value",110);
+document.getElementById("height").setAttribute("disabled",true);
+document.getElementById("angle").setAttribute("value",0);
+document.getElementById("angle").setAttribute("disabled",true);
+document.getElementById("Vo").setAttribute("value",400);
+document.getElementById("Vo").setAttribute("disabled",true);
+document.getElementById("target").value="none";
+document.getElementById("target").setAttribute("disabled",true);
+layout([110, 29, 400, [1040, 25]]);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Find the time the shell hit the ground (y = 0). </p>';
+document.getElementById("power").value="OFF";
+document.getElementById("height").setAttribute("value",70);
+document.getElementById("height").setAttribute("disabled",true);
+document.getElementById("angle").setAttribute("value",5);
+document.getElementById("angle").setAttribute("disabled",true);
+document.getElementById("Vo").setAttribute("value",450);
+document.getElementById("Vo").setAttribute("disabled",true);
+document.getElementById("target").value="none";
+document.getElementById("target").setAttribute("disabled",true);
+layout([70, 5, 450, [1030, 40]]);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Find the time and the horizontal distance when the shell reaches to the maximum height. </p>';
+document.getElementById("power").value="OFF";
+document.getElementById("height").setAttribute("value",30);
+document.getElementById("height").setAttribute("disabled",true);
+document.getElementById("angle").setAttribute("value",39);
+document.getElementById("angle").setAttribute("disabled",true);
+document.getElementById("Vo").setAttribute("value",450);
+document.getElementById("Vo").setAttribute("disabled",true);
+document.getElementById("target").value="none";
+document.getElementById("target").setAttribute("disabled",true);
+layout([30, 39, 450, [1000, 20]]);
+}
+
+function display_Q3() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">4. Use the regression to find the gravitational constant g and compare it with 9.8 m/s<sup>2</sup>. </p>';
+document.getElementById("power").value="OFF";
+document.getElementById("height").setAttribute("value",55);
+document.getElementById("height").setAttribute("disabled",true);
+document.getElementById("angle").setAttribute("value",28);
+document.getElementById("angle").setAttribute("disabled", true);
+document.getElementById("Vo").setAttribute("value",600);
+document.getElementById("Vo").setAttribute("disabled",true);
+document.getElementById("target").value="none";
+document.getElementById("target").setAttribute("disabled",true);
+layout([55, 28, 600, [1070, 15]]);
+}
+
+function display_Q4() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">5. Find the V<sub>o</sub> to hit the bucket. </p>';
+document.getElementById("power").value="OFF";
+document.getElementById("height").setAttribute("value",70);
+document.getElementById("height").setAttribute("disabled",true);
+document.getElementById("angle").setAttribute("value",30);
+document.getElementById("angle").setAttribute("disabled", true);
+document.getElementById("Vo").setAttribute("value",300);
+document.getElementById("Vo").removeAttribute("disabled");
+document.getElementById("target").value="bucket";
+document.getElementById("target").setAttribute("disabled",true);
+layout([70, 30, 300, [900, 35]]);
+}
+
+var canvasImage;
+//ctx.canvas.height=Math.min(window.innerHeight-10);
+ch=cnvs.height;
+var ccX=140.5, ccY=ch-130.5, target;
+drawScales();
+
+drawAll(0,0);
+
+ctx.beginPath();
+ctx.fillStyle="pink";
+ctx.strokeStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Lab of Projectile Motion", cw/2, ch/2);
+ctx.strokeText("Welcome to the Virtual Lab of Projectile Motion", cw/2, ch/2);
+ctx.fillText("Integrated System & Engineering", cw/2, ch/2+50);
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work is different.";
+msg += "\n3. When the cannon shell is fired, its trajectory is displayed at assigned time intervals.";
+msg += "\n4. Once the shell is fired, the coordinate (x,y) of the point mouse on will be displayed in the unit of cm.";
+alert(msg);
+}
+
+function drawScales() {
+ ctx.clearRect(0,0,cw,ch);
+ // horizontal scales
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.fillStyle="black";
+ ctx.font="normal 14px Palatino Linotype";
+ ctx.textAlign="right";
+
+ var yp=0;
+
+ for (let i=0; i<(ch/10); i++) {
+  y = i*10;
+  ctx.moveTo(140, y+0.5);
+  if (i%10 == 0) {
+   ctx.lineTo(158, y+0.5);
+   ctx.fillText(((ccY-y)/100).toFixed(0), 135, y+5);
+  }
+  else ctx.lineTo(148, y+0.5);
+  ctx.stroke();
+ }
+
+ ctx.textAlign="center";
+ for (var x=0; x<cw; x+=10) {
+  ctx.moveTo(x+140.5, ccY);
+  if (x%100 == 0) {
+   ctx.lineTo(x+140.5, ccY-18);
+   ctx.fillText((x/100).toFixed(0), x+140.5, ccY+13);
+  }
+  else ctx.lineTo(x+140.5, ccY-8);
+  ctx.stroke();
+ }
+
+ ctx.font="normal 18px Palatino Linotype";
+ ctx.textAlign="right";
+ ctx.fillText("(m)", 130, 15);
+ ctx.fillText("(m)", ccX+65, ccY+13);
+
+ canvasImage=ctx.getImageData(0,0,cw,ch);
+}
+
+
+function layout(initialPrms) {
+ target=initialPrms[3];
+
+ cnvs.onmousemove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+  
+  drawAll(pxX, pxY);
+ }
+
+ document.getElementById("height").addEventListener("change", function() {drawAll();});
+
+ document.getElementById("angle").addEventListener("change", function() {drawAll();});
+
+ document.getElementById("Vo").addEventListener("change", function() {drawAll();});
+
+ var powerButton = document.getElementById("power");
+ powerButton.onclick = function(e) {
+  if (powerButton.value == "OFF") powerButton.value = "ON";
+  else {
+   powerButton.value = "OFF";
+  }
+  drawAll(0,0);
+ };
+
+ drawAll(0,0)
+}
+
+function drawAll(pxX, pxY) {
+ ctx.putImageData(canvasImage,0,0);
+
+ //ctx.strokeStyle="black";
+ //ctx.textAlign="center";
+ //ctx.font="normal 40px Palatino Linotype";
+ //ctx.fillText("w="+cw+", h="+ch, cw/2, ch/2);
+
+
+ var Ho=Number(document.getElementById("height").value)-70;
+ var angle=Number(document.getElementById("angle").value);
+ var Vo=Number(document.getElementById("Vo").value);
+
+ angle *= (Math.PI/180);
+ var cosA=Math.cos(angle), sinA=Math.sin(angle);
+ var xtraX=60-60*cosA;
+
+ var gradient=ctx.createLinearGradient(30+xtraX, 0, 130+xtraX, 0);
+ gradient.addColorStop(0, "#777777aa");
+ gradient.addColorStop(0.5, "white");
+ gradient.addColorStop(1, "#77777722");
+
+ ctx.beginPath();
+ ctx.strokeStyle="#0009";
+ ctx.fillStyle=gradient;
+ ctx.rect(40+xtraX, ccY-Ho, 80, ch-ccY+Ho);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.moveTo(40+xtraX, ccY-Ho);
+ ctx.lineTo(80+xtraX, ccY-70-Ho);
+ ctx.lineTo(120+xtraX,ccY-Ho);
+ ctx.closePath();
+ ctx.fill();
+
+ ctx.translate(80+xtraX,ccY-70-Ho);
+ ctx.rotate(-angle);
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.fillStyle="black";
+ ctx.fillRect(-60,-10,120,20);
+ ctx.stroke();
+ ctx.setTransform(1,0,0,1,0,0);
+
+ ctx.beginPath();
+ ctx.fillStyle="red";
+ ctx.arc(80+xtraX,ccY-70-Ho,2,0,2*Math.PI);
+ ctx.fill();
+
+ if (document.getElementById("target").value == "bucket") {
+  ctx.beginPath();
+  ctx.fillStyle="goldenrod";
+  ctx.fillRect(target[0]+ccX, ccY, target[1], target[1]);
+ }
+
+ if (document.getElementById("power").value == "ON") {
+  var dt = Number(document.getElementById("deltaT").value)/1000;
+  var g = -980;
+  var xo = 0, yo = Ho+70+60*Math.sin(angle);
+  //var vx = Vo*Math.cos(angle), vy = Vo*Math.sin(angle);
+  var vx = Vo*cosA, vy = Vo*sinA;
+  ctx.fillStyle="black";
+  for (let t=0; t<2; t+=dt) {
+   x = xo + vx*t, y = yo + vy*t + g*t**2/2;
+   ctx.beginPath();
+   ctx.arc(x+ccX,ccY-y, 3, 0, 2*Math.PI);
+   ctx.fill();
+  }
+  ctx.beginPath();
+  ctx.fillStyle="black";
+  ctx.textAlign="left";
+  ctx.font="normal 18px Palatino Linotype";
+  ctx.fillText((pxX-ccX-0.5)+","+(ccY-pxY-0.5), pxX, pxY);
+ }
+}</script>\n</body>\n</html>
