@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Constant_Velocity_Motion12225268 NIMATILAEV JAVOKHIR IZATILLO UGLI_(자버히르)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Constant_Velocity_Motion12225268 NIMATILAEV JAVOKHIR IZATILLO UGLI_(자버히르)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+&#8592; Select one button on the left. &nbsp;<a href="https://brython.info/tests/editor.html?lang=en" target="_blank">Brython</a>&nbsp;
+<input type="button" id="run" value="RUN" STYLE="background-color: #cce6ff;">
+Help: <input type="button" id="pauseBtn" value="help" onclick="displayHelp();"><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Find the speed of the glider. </p>';
+layout([97.0, [8, 187, 373, 586, 828]]);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Find the speed of the glider. </p>';
+layout([90.0, [5, 184, 378, 582, 844]]);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Find the speed of the glider. </p>';
+layout([44.0, [14, 187, 368, 599, 834]]);
+}
+
+var canvasImage;
+var gliderX=80.5, paused = true, dx=2.5, dxHaf=dx/2, gates=[200,400,600], times=[], increment=0;
+var trackEnd=0, dtms=50;
+Apparatus();
+
+
+ctx.beginPath();
+ctx.fillStyle="orange";
+ctx.strokeStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Laboratory of Constant Velocity Motion", cw/2, ch/2);
+ctx.strokeText("Welcome to the Virtual Laboratory of Constant Velocity Motion", cw/2, ch/2);
+ctx.fillText("Integrated System & Engineering", cw/2, ch/2+50);
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work is different.";
+msg += "\n3. The glider on the left edge of the track starts moving as the button, RUN, is clicked.";
+msg += "\n4. Whenever a glider pass through each gate, an integer will be added to the measurement. Each integer indicates the elapsed times: 20 corresponds to "+ (dtms*20/1000)+" sec (=20 * "+(dtms/1000)+" sec). The incremental time is fixed at "+dtms+ " msec.";
+msg += "\n5. Use Vernier calipers to find the locations, in 0.1 mm resolution, of photogates.";
+alert(msg);
+}
+
+
+function Apparatus() {
+ ctx.clearRect(0,0,cw,ch);
+
+ ctx.beginPath();
+ ctx.fillStyle="#ddd";
+ ctx.strokeStyle="black";
+ ctx.rect(30,100.5,cw-10, 60);
+ ctx.fill();
+ ctx.stroke();
+ trackEnd=30+cw-10;
+
+ // horizontal scales
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.font="normal 14px Palatino Linotype";
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ for (let x=0; x<cw-100; x+=10) {
+  ctx.moveTo(x+130.5, 160.5);
+  if (x%100 == 0) {
+   ctx.fillText(x, x+130, 115);
+   ctx.lineTo(x+130.5, 120.5);
+  }
+  else if (x%50 == 0) ctx.lineTo(x+130.5, 130.5);
+  else ctx.lineTo(x+130.5, 140.5);
+  ctx.stroke();
+ }
+ ctx.fillText("(mm)", parseInt(cw/100)*100-20, 125);
+
+ // photogates:
+ for (let i=0; i<gates.length; i++) {
+  setGate(gates[i]);
+ }
+ canvasImage=ctx.getImageData(0,0,cw,ch);
+}
+
+
+function layout(iValues) {
+ gliderX=80.5;
+ dx = iValues[0]*dtms/1000;
+ dxHaf = dx/2;
+ gates=iValues[1];
+ Apparatus();
+ var runButton = document.getElementById("run");
+ runButton.onclick = function(e) {
+  paused = paused ? false : true;
+  if (paused) runButton.value = "RUN";
+  else {
+   if (times.length == gates.length) times = []; increment=0;
+   runButton.value = "Pause";
+  }
+ };
+ setInterval(drawAll, dtms);
+}
+
+function timeIt() {
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ ctx.font="normal 28px Palatino Linotype";
+ ctx.fillText(times, cw/2, ch/2);
+}
+
+function drawAll(){
+ ctx.putImageData(canvasImage,0,0);
+ increment += 1;
+ if (!paused) { // 이동 중...
+   gliderX += dx;
+   if (gliderX > trackEnd) {
+     document.getElementById("run").value = "RUN";
+     paused = true;
+     gliderX = 80.5;
+   }
+   for (let j=0; j<=gates.length; j++) {
+    gateX=gates[j]+130.5;
+    if (gateX-dxHaf <= gliderX && gliderX < gateX+dxHaf) times.push(increment);
+   }
+ }
+ timeIt();
+
+ // glider
+ ctx.beginPath(); ctx.fillStyle="#999966"; ctx.fillRect(gliderX-50.5,70.5,50, 30); ctx.strokeStyle="blue"; ctx.moveTo(gliderX, 20.5); ctx.lineTo(gliderX, 100.5); ctx.lineTo(gliderX-50.5, 100.5); ctx.lineTo(gliderX-50.5, 70.5); ctx.lineTo(gliderX, 70.5); ctx.stroke();
+}
+
+function setGate(gateX) {
+ ctx.beginPath(); ctx.font="normal 12px Palatino Linotype"; ctx.fillStyle="#ffa31a"; ctx.fillRect(gateX+120.5,150.5,110,30); ctx.moveTo(gateX+130.5, 20.5); ctx.lineTo(gateX+130.5, 150.5); ctx.lineTo(gateX+230.5, 150.5); ctx.lineTo(gateX+230.5, 180.5); ctx.lineTo(gateX+120.5, 180.5); ctx.lineTo(gateX+120.5, 150.5); ctx.lineTo(gateX+130.5, 150.5); ctx.stroke(); ctx.fillStyle="black"; ctx.textAlign="center"; for (let i=0; i<11; i++) {  x=i*9+gateX+130.5;  ctx.moveTo(x,150.5);  ctx.lineTo(x,165.5);  ctx.stroke();  ctx.fillText(i, x, 177); };}</script>\n</body>\n</html>
