@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Elastic collision between gliders12214752 ILKHOMOV AKHRORBEK MARDONBEK UGLI_(아흐로르벡)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Elastic collision between gliders12214752 ILKHOMOV AKHRORBEK MARDONBEK UGLI_(아흐로르벡)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+	<input type="button" onclick="javascript:display_Q3();" value="Q-4" /> &emsp;
+	<input type="button" onclick="javascript:display_Q4();" value="Q-5" /> &emsp;
+&#8592; Select one button on the left. &nbsp;
+<a href="https://brython.info/tests/editor.html?lang=en" target="_blank">Brython</a>&nbsp;
+<input type="button" id="run" value="RUN" STYLE="background-color: #cce6ff;">
+Help: <input type="button" id="pauseBtn" value="help" onclick="displayHelp();"><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Prove that the collision between 2 identical gliders is elastic collision. </p>';
+paused=true, dx=0, dx2=0;
+document.getElementById("run").value="RUN";
+layout([6.3, [1, 142, 294, 435, 584, 744, 883, 1046], 1]);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Prove that the collision with m2/m1=7.0 is elastic collision. </p>';
+paused=true, dx=0, dx2=0;
+document.getElementById("run").value="RUN";
+layout([7.2, [-4, 132, 297, 444, 579, 744, 895, 1046], 7.0]);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Prove that the collision with m2/m1=0.38 is elastic collision. </p>';
+paused=true, dx=0, dx2=0;
+document.getElementById("run").value="RUN";
+layout([6.4, [9, 149, 295, 423, 579, 743, 897, 1043], 0.38]);
+}
+
+function display_Q3() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">4. Assuming that the collision below is elastic collision, find the ratio m2/m1. </p>';
+paused=true, dx=0, dx2=0;
+document.getElementById("run").value="RUN";
+layout([4.2, [0, 135, 289, 437, 596, 744, 884, 1037], 5.5]);
+}
+
+function display_Q4() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">5. Assuming that the collision below is elastic collision, find the ratio m2/m1. </p>';
+paused=true, dx=0, dx2=0;
+document.getElementById("run").value="RUN";
+layout([5.4, [7, 145, 288, 447, 576, 736, 888, 1027], 0.18]);
+}
+
+var canvasImage;
+var gliderX=40.5, originX=60.5, paused = true, dx=2.5, dxHaf=dx/2;
+var gates=[200,400,600];
+var times=[];
+var increment=0;
+var trackEnd=0;
+var gliderX2=0, mass2=0, dx2=0, dxHaf2=0;
+Apparatus();
+
+
+ctx.beginPath();
+ctx.fillStyle="orange";
+ctx.strokeStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Laboratory of Collision", cw/2, ch/2);
+ctx.strokeText("Welcome to the Virtual Laboratory of Collision", cw/2, ch/2);
+ctx.fillText("Integrated System & Engineering", cw/2, ch/2+50);
+
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work is different.";
+msg += "\n3. The left glider starts moving as the button, RUN, is clicked.";
+msg += "\n4. Whenever a glider pass through each gate, a set of 3 numbers will be displayed.";
+msg += "\n    The 1st number means the glider: 1-the incident glider, 2: the glider at rest.";
+msg += "\n    The 2nd number is the number of the photogate: 0 being the very front one.";
+msg += "\n    The 3rd number is an integer indicating the elapsed time: 10 corresponds to 1 sec (=10 * 0.1 sec).";
+msg += "\n5. Use Vernier calipers to find the exact locations of photogates to calculate the speeds of gliders.";
+alert(msg);
+}
+
+function Apparatus() {
+ ctx.clearRect(0,0,cw,ch);
+
+ ctx.beginPath();
+ ctx.fillStyle="#ddd";
+ ctx.strokeStyle="black";
+ ctx.rect(0,100.5,cw-10, 60);
+ ctx.fill();
+ ctx.stroke();
+ trackEnd=cw-10;
+
+ // horizontal scales
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.font="normal 14px Palatino Linotype";
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ for (let x=-10; x<trackEnd-originX; x+=10) {
+  ctx.moveTo(x+originX, 160.5);
+  if (x%100 == 0) {
+   ctx.fillText(x, x+originX, 115);
+   ctx.lineTo(x+originX, 120.5);
+  }
+  else if (x%50 == 0) ctx.lineTo(x+originX, 130.5);
+  else ctx.lineTo(x+originX, 140.5);
+  ctx.stroke();
+ }
+ ctx.fillText("(mm)", parseInt(cw/100)*100-20, 125);
+
+ // photogates:
+ for (let i=0; i<gates.length; i++) {
+  setGate(gates[i]);
+ }
+ canvasImage=ctx.getImageData(0,0,cw,ch);
+}
+
+
+function layout(iValues) {
+ times = [];
+ gliderX = 40.5;
+ dx = iValues[0];
+ dxHaf = dx/2;
+ gates=iValues[1];
+ mass2=iValues[2];
+ //gliderX2=parseInt(trackEnd/2)+0.5, dx2=0, dxHaf2=0;
+ gliderX2=600.5, dx2=0, dxHaf2=0;
+ Apparatus();
+ var runButton = document.getElementById("run");
+ runButton.onclick = function(e) {
+  paused = paused ? false : true;
+  if (paused) runButton.value = "RUN";
+  else {
+   if (times.length == gates.length) times = []; increment=0;
+   runButton.value = "Pause";
+  }
+ };
+ setInterval(drawAll, 100);
+}
+
+function timeIt() {
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ ctx.font="normal 28px Palatino Linotype";
+ ctx.fillText(times, cw/2, ch/2);
+}
+
+function drawAll(){
+ ctx.putImageData(canvasImage,0,0);
+ increment += 1;
+ if (!paused) {
+   gliderX += dx;
+   gliderX2 += dx2;
+   if (gliderX > trackEnd || gliderX <0) {
+     //document.getElementById("run").value = "RUN";
+     //paused = true;
+     gliderX = 40.5;
+     dx=0;
+   }
+   if (gliderX2 > trackEnd) {
+    //gliderX2=parseInt(trackEnd/2)+0.5, dx2=0, dxHaf2=0;
+    gliderX2=600.5;
+    dx2=0, dxHaf2=0;
+    if (dx==0) gliderX=40.5;
+   }
+   for (let j=0; j<=gates.length; j++) {
+    gateX=gates[j]+originX;
+    if (dx > 0) {
+     if (gateX-dxHaf <= gliderX && gliderX < gateX+dxHaf) times.push("1-"+j+"-"+increment);
+     if (gateX-dxHaf2 <= gliderX2 && gliderX2 < gateX+dxHaf2) times.push("2-"+j+"-"+increment);
+    }
+    else {
+     if (gateX+dxHaf <= gliderX && gliderX < gateX-dxHaf) times.push("1-"+j+"-"+increment);
+     if (gateX-dxHaf2 <= gliderX2 && gliderX2 < gateX+dxHaf2) times.push("2-"+j+"-"+increment);
+    }
+   }
+   if (gliderX2-50-dxHaf <= gliderX && gliderX < gliderX2-50+dxHaf) {
+    dx2 = dx*2/(1+mass2), dx *= (1-mass2)/(1+mass2), dxHaf = dx/2, dxHaf2 = dx2/2;
+    times.push("Hit-"+increment);
+   }
+ }
+ timeIt();
+
+ // glider
+ ctx.beginPath(); ctx.fillStyle="#999966"; ctx.fillRect(gliderX-50.5,70.5,50, 30); ctx.strokeStyle="blue"; ctx.moveTo(gliderX, 20.5); ctx.lineTo(gliderX, 100.5); ctx.lineTo(gliderX-50.5, 100.5); ctx.lineTo(gliderX-50.5, 70.5); ctx.lineTo(gliderX, 70.5); ctx.stroke();
+
+ // glider#2
+ ctx.beginPath(); ctx.fillStyle="#669999"; ctx.fillRect(gliderX2-50.5,70.5,50, 30); ctx.strokeStyle="blue"; ctx.moveTo(gliderX2, 20.5); ctx.lineTo(gliderX2, 100.5); ctx.lineTo(gliderX2-50.5, 100.5); ctx.lineTo(gliderX2-50.5, 70.5); ctx.lineTo(gliderX2, 70.5); ctx.stroke();
+
+}
+
+function setGate(gateX) {
+ ctx.beginPath(); ctx.font="normal 12px Palatino Linotype"; ctx.fillStyle="#ffa31a"; ctx.fillRect(gateX+originX-5,150.5,100,30); ctx.moveTo(gateX+originX, 20.5); ctx.lineTo(gateX+originX, 150.5); ctx.lineTo(gateX+originX+95, 150.5); ctx.lineTo(gateX+originX+95, 180.5); ctx.lineTo(gateX+originX-5, 180.5); ctx.lineTo(gateX+originX-5, 150.5); ctx.lineTo(gateX+originX, 150.5); ctx.stroke(); ctx.fillStyle="black"; ctx.textAlign="center"; for (let i=0; i<11; i++) {  x=i*9+gateX+originX;  ctx.moveTo(x,150.5);  ctx.lineTo(x,165.5);  ctx.stroke();  ctx.fillText(i, x, 177); };}</script>\n</body>\n</html>
