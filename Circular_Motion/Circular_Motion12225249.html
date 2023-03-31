@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Circular_Motion12225249 TSOGOO MUNKHZUL_(몽후졸)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Circular_Motion12225249 TSOGOO MUNKHZUL_(몽후졸)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+	<input type="button" onclick="javascript:display_Q3();" value="Q-4" /> &emsp;
+	<input type="button" onclick="javascript:display_Q4();" value="Q-5" /> &emsp;
+&#8592; Select one button on the left. &nbsp;
+
+String L (mm): <input type="number" id="stringL" value=0 STYLE="font-size:18px;" min=400 max=550>
+Motion: <input type="button" id="motion" value="OFF" STYLE="background-color: #cce000;">
+v<sub>T</sub> (mm/s): <input type="number" id="vT" value=0 STYLE="font-size:18px;" min=400 max=550>&nbsp;Help: <input type="button" id="pauseBtn" value="help" onclick="displayHelp();"><a href="https://brython.info/tests/editor.html?lang=en" target="_blank">Brython</a><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. An object attached to a string is spinning around vertical axis. Use mouse to set the angle between the string and axis as 40&#176;. Determine the tangential speed of the object. </p>';
+document.getElementById("stringL").value=530;
+document.getElementById("stringL").setAttribute("disabled", true);
+document.getElementById("vT").value=0;
+document.getElementById("vT").setAttribute("disabled", true);
+document.getElementById("motion").value="OFF";
+document.getElementById("motion").removeAttribute("disabled");
+vmm = 0, Rmm = 0, omega=0, dPhi=0, phi = 0, elapsedTime=0;
+hRun = clearInterval(hRun);
+layout();
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. An object (mass =2 g) attached to a string is spinning around vertical axis. Use mouse to set the angle between the string and axis as 10&#176;. Determine the centripetal force acting on the object. </p>';
+document.getElementById("stringL").value=430;
+document.getElementById("stringL").setAttribute("disabled", true);
+document.getElementById("vT").value=0;
+document.getElementById("vT").setAttribute("disabled", true);
+document.getElementById("motion").value="OFF";
+document.getElementById("motion").removeAttribute("disabled");
+vmm = 0, Rmm = 0, omega=0, dPhi=0, phi = 0, elapsedTime=0;
+hRun = clearInterval(hRun);
+layout();
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. An object (mass =12 g) attached to a string is spinning around vertical axis. Use mouse to set the angle between the string and axis as 25&#176;. Determine the Tension in the string. </p>';
+document.getElementById("stringL").value=540;
+document.getElementById("stringL").setAttribute("disabled", true);
+document.getElementById("vT").value=0;
+document.getElementById("vT").setAttribute("disabled", true);
+document.getElementById("motion").value="OFF";
+document.getElementById("motion").removeAttribute("disabled");
+vmm = 0, Rmm = 0, omega=0, dPhi=0, phi = 0, elapsedTime=0;
+hRun = clearInterval(hRun);
+layout();
+}
+
+function display_Q3() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">4. An object (mass =20 g) attached to a string is spinning around vertical axis, and the tangential speed of the object is fixed at 2370.17 m/s. Determine the Tension in the string. </p>';
+document.getElementById("stringL").value=490;
+document.getElementById("stringL").setAttribute("disabled", true);
+document.getElementById("vT").value=2370.17;
+document.getElementById("vT").setAttribute("disabled", true);
+document.getElementById("motion").value="RUNNING";
+document.getElementById("motion").setAttribute("disabled", true);
+vmm = 2370.17;
+var f=vmm**2/(2*Lmm*gmm);
+Rmm = Lmm*Math.sin(Math.acos(Math.sqrt(f**2+1)-f)), hafRmm=Rmm/2;
+omega=vmm/Rmm;
+dPhi=omega*dt;
+phi = 0;
+elapsedTime=0;
+hRun = clearInterval(hRun);
+hRun = setInterval(drawAll, dtms);
+}
+
+function display_Q4() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">5. An object (mass =1 g) attached to a string is spinning around vertical axis in a plane as seen from top, and the tangential speed of the object is fixed at 1285.72 m/s. Determine the Tension in the string. </p>';
+document.getElementById("stringL").value=420;
+document.getElementById("stringL").setAttribute("disabled", true);
+document.getElementById("vT").value=1285.72;
+document.getElementById("vT").setAttribute("disabled", true);
+document.getElementById("motion").value="RUNNING";
+document.getElementById("motion").setAttribute("disabled", true);
+vmm = 1285.72;
+var f=vmm**2/(2*Lmm*gmm);
+Rmm = Lmm*Math.sin(Math.acos(Math.sqrt(f**2+1)-f)), hafRmm=Rmm/2;
+omega=vmm/Rmm;
+dPhi=omega*dt;
+phi = 0;
+elapsedTime=0;
+hRun = clearInterval(hRun);
+hRun = setInterval(drawAll2, dtms);
+}
+
+var canvasImage;
+ctx.canvas.height=Math.max(window.innerHeight-130, 750);
+ch=cnvs.height
+
+var ccX=100*parseInt(cw/200)+75, ccY=100*parseInt(ch/400);
+var alpha=0.2, Lmm=480, gmm=9800;
+var vT = 0, vmm=0, d=vmm**2/(Lmm*gmm), vLmm=Lmm*(Math.sqrt(d**2+4)-d)/2;
+var Rmm=Math.sqrt(Lmm**2-vLmm**2), hafRmm=Rmm/2;
+var omega=0, dt=0.025, dtms=dt*1000, dPhi=0, phi=0, hRun=null, motion=false, elapsedTime;
+var dragging, mouseX;
+
+Apparatus();
+
+
+ctx.beginPath();
+ctx.fillStyle="orange";
+ctx.strokeStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Laboratory of Circular Motion", cw/2, ch/2);
+ctx.strokeText("Welcome to the Virtual Laboratory of Circular Motion", cw/2, ch/2);
+ctx.fillText("Integrated System & Engineering", cw/2, ch/2+50);
+
+
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work is different.";
+msg += "\n3. Hold down and move the mouse to spin a weight tied to a thread with the other end fixed in the center. The more the mouse moves, the faster the weight moves.";
+msg += "\n4. No air resistance.";
+alert(msg);
+}
+
+function manual() {
+ ctx.clearRect(0,0,cw,ch);
+
+ var maxWidth = 500;
+ var lineHeight = 24;
+ var x = (cw - maxWidth) / 2;
+ var y = 60;
+ var text = "1. Select one button on the top left corner to start Virtual lab.  2. Each work is different.  3. Hold down and move the mouse to spin a weight tied to a thread with the other end fixed in the center. The more the mouse moves, the faster the weight moves.   4. No air resistance.";
+
+ ctx.font = "15pt Calibri";
+ ctx.fillStyle = '#333';
+ ctx.textAlign="left";
+ wrapText(text, x, y, maxWidth, lineHeight);
+}
+
+function Apparatus() {
+ ctx.clearRect(0,0,cw,ch);
+
+ ctx.beginPath();
+ ctx.fillStyle="#eee";
+ ctx.fillRect(ccX-610.5, 600.5, 1220, 50);
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.fillStyle="black";
+ctx.font="normal 12px Palatino Linotype";
+ ctx.textAlign="center";
+ for (let x=ccX-600; x<=ccX+600; x+=5) {
+  ctx.moveTo(x+0.5, 600);
+  if ((x-ccX)%100 == 0) {
+   ctx.lineTo(x+0.5, 635);
+   ctx.fillText(x-ccX, x,650)
+  }
+  else if ((x-ccX)%50 == 0) ctx.lineTo(x+0.5, 630);
+  else if ((x-ccX)%10 == 0) ctx.lineTo(x+0.5, 620);
+  else ctx.lineTo(x+0.5, 615);
+  ctx.stroke();
+ }
+
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ var aRad, cosA, sinA, x, y;
+ for (let a=-70; a<71; a++) {
+  aRad = a*Math.PI/180+Math.PI/2;
+  cosA=Math.cos(aRad);
+  sinA=Math.sin(aRad);
+  x=330*cosA+ccX, y=330*sinA+70;
+  ctx.moveTo(x,y);
+  if (a%10==0) x=400*cosA+ccX, y=400*sinA+70;
+  else if (a%5 == 0) x=370*cosA+ccX, y=370*sinA+70;
+  else x=350*cosA+ccX, y=350*sinA+70;
+  ctx.lineTo(x,y);
+  ctx.stroke();
+ }
+
+ ctx.beginPath();
+ ctx.fillStyle="red";
+ ctx.fillRect(ccX-10,650,20,20);
+
+ canvasImage=ctx.getImageData(0,0,cw,ch);
+}
+
+
+function layout() {
+ Lmm=Number(document.getElementById("stringL").value);
+ vLmm=Lmm;
+
+ var motionButton = document.getElementById("motion");
+ motionButton.onclick = function(e) {
+  if (motionButton.value == "OFF") {
+   motionButton.value = "RUNNING";
+   motion=true;
+   hRun = setInterval(drawAll, dtms);
+  }
+  else {
+   motionButton.value = "OFF";
+   motion=false;
+   hRun = clearInterval(hRun);
+  }
+  drawAll();
+ };
+
+ cnvs.onmouseup = function(e) {
+  e.preventDefault();
+  dragging=false;
+ }
+
+ cnvs.ontouchend = function(e) {
+  e.preventDefault();
+  dragging=false;
+ }
+
+ cnvs.onmousedown = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  
+  if (motion == true) {
+   dragging=true;
+   vmm = 0;
+   phi = 0;
+   mouseX = pxX;
+   elapsedTime=0;
+  }
+ }
+
+ cnvs.ontouchstart = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+  
+  if (motion == true) {
+   dragging=true;
+   vmm = 0;
+   phi = 0;
+   mouseX = pxX;
+   elapsedTime=0;
+  }
+ }
+
+ cnvs.onmousemove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+
+  if (motion== true && dragging == true) {
+   vmm += Math.abs((pxX-mouseX)/10);
+   var f=vmm**2/(2*Lmm*gmm);
+   //var mOverM=Math.sqrt(f**2+1)-f;
+   //var theta=Math.acos(mOverM);
+   //Rmm = Lmm*Math.sin(theta), hafRmm=Rmm/2;
+   Rmm = Lmm*Math.sin(Math.acos(Math.sqrt(f**2+1)-f)), hafRmm=Rmm/2;
+   omega=vmm/Rmm;
+   dPhi=omega*dt;
+  }
+ }
+
+ cnvs.ontouchmove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+
+  if (motion== true && dragging == true) {
+   vmm += Math.abs((pxX-mouseX)/10);
+   //d=vmm**2/(2*Lmm*gmm);
+   //vLmm=Lmm*(Math.sqrt(d**2+1)-d);
+   //Rmm=Math.sqrt(Lmm**2-vLmm**2), hafRmm=Rmm/2;
+
+   var f=vmm**2/(2*Lmm*gmm);
+   //var mOverM=Math.sqrt(f**2+1)-f;
+   //var theta=Math.acos(mOverM);
+   //Rmm = Lmm*Math.sin(theta), hafRmm=Rmm/2;
+   Rmm = Lmm*Math.sin(Math.acos(Math.sqrt(f**2+1)-f)), hafRmm=Rmm/2;
+   omega=vmm/Rmm;
+   dPhi=omega*dt;
+  }
+ }
+
+ drawAll();
+}
+
+
+function drawAll() {
+ ctx.putImageData(canvasImage,0,0);
+
+ RcosT=Rmm*Math.cos(phi);
+ RsinT=Rmm*Math.sin(phi);
+ x=ccX+RsinT;
+ y=40+vLmm+RcosT*alpha;
+
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.arc(x,y, 20-Math.abs(15*Math.sin(phi/2)) ,0, 2*Math.PI);
+ ctx.fill();
+
+ ctx.beginPath();
+ ctx.strokeStyle="red";
+ ctx.moveTo(ccX,650);
+ ctx.lineTo(ccX, 40);
+ ctx.lineTo(x,y);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.fillStyle="#aaa";
+ ctx.arc(x, 610,5, 0, 2*Math.PI);
+ ctx.fill();
+
+ //ctx.beginPath();
+ //ctx.fillStyle="black";
+ //ctx.textAlign="left";
+ //ctx.font="normal 20px Palatino Linotype";
+ //ctx.fillText("vmm="+vmm.toFixed(2), 10, 100);
+ //ctx.fillText("omega="+omega.toFixed(2), 10, 130);
+ //ctx.fillText("dPhi="+dPhi.toFixed(2), 10, 160);
+ //ctx.fillText("Rmm="+Rmm.toFixed(2), 10, 190);
+ //ctx.fillText("vLmm="+vLmm.toFixed(2), 10, 220);
+
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.font="normal 20px Palatino Linotype";
+ //ctx.fillText("Elasped time = "+elapsedTime.toFixed(2)+" (s)", 10, 30);
+ ctx.textAlign="center";
+ ctx.fillText("Period = "+(2*Math.PI*elapsedTime/phi).toFixed(3)+" (s)", ccX, 20);
+
+ phi += dPhi;
+ elapsedTime += dt;
+}
+
+function drawAll2() {
+ ctx.clearRect(0,0,cw,ch);
+ RcosT=Rmm*Math.cos(phi);
+ RsinT=Rmm*Math.sin(phi);
+ x=ccX+RsinT;
+ y=ch/2+RcosT;
+
+ ctx.beginPath();
+ ctx.strokeStyle="red";
+ ctx.moveTo(ccX,ch/2);
+ ctx.lineTo(x,y);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.arc(x,y, 15 ,0, 2*Math.PI);
+ ctx.fill();
+
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.textAlign="left";
+ ctx.font="normal 20px Palatino Linotype";
+ //ctx.fillText("vmm="+vmm.toFixed(2), 10, 100);
+ //ctx.fillText("omega="+omega.toFixed(2), 10, 130);
+ //ctx.fillText("dPhi="+dPhi.toFixed(2), 10, 160);
+ //ctx.fillText("Rmm="+Rmm.toFixed(2), 10, 190);
+ //ctx.fillText("vLmm="+vLmm.toFixed(2), 10, 220);
+
+ //ctx.fillText("Elasped time = "+elapsedTime.toFixed(2)+" (s)", 10, 30);
+ ctx.textAlign="center";
+ ctx.fillText("Period = "+(2*Math.PI*elapsedTime/phi).toFixed(3)+" (s)", ccX, 20);
+
+ phi += dPhi;
+ elapsedTime += dt;
+}</script>\n</body>\n</html>
