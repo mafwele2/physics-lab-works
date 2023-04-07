@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Simple_Harmonic_Motion12225257 ESHMIRZAEV SARVAR RAUFJONOVICH_(사르바르사)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Simple_Harmonic_Motion12225257 ESHMIRZAEV SARVAR RAUFJONOVICH_(사르바르사)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+	<input type="button" onclick="javascript:display_Q3();" value="Q-4" /> &emsp;
+&#8592; Select one button on the left. &nbsp;
+Interval time (ms): <select id="dtms">
+  <option value=100>100</option>
+  <option value=50 selected>50</option>
+  <option value=20>20</option>
+  <option value=10>10</option>
+</select>
+m (g): <input type="number" id="mass" value=0 STYLE="font-size:18px;" min=0 max=200>
+SHM: <input type="button" id="SHM" value="OFF" STYLE="background-color: #cce000;">&nbsp; <input type="button" id="pauseBtn" value="help" onclick="displayHelp();"> <a href="http://hyperphysics.phy-astr.gsu.edu/hbase/shm2.html" target="_blank">Simple Harmonic Motion</a>&nbsp; <a href="https://brython.info/tests/editor.html?lang=en" target="_blank">Brython</a><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Find the spring constant by measuring the extended length as a function of mass. g=9.8 m/s<sup>2</sup>. </p>';
+document.getElementById("mass").value=0;
+document.getElementById("SHM").value="OFF";
+document.getElementById("SHM").setAttribute("disabled", true);
+layout([0.356]);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Find the spring constant by measuring the extended length as a function of mass. g=9.8 m/s<sup>2</sup>. </p>';
+document.getElementById("mass").value=0;
+document.getElementById("SHM").value="OFF";
+document.getElementById("SHM").setAttribute("disabled", true);
+layout([0.286]);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Use the time displayed on the screen to count the number of oscillations for a given time to determine the periods as a function of mass, and compare them with the theoretical values calculated with the spring constant measured by the method described previously. </p>';
+document.getElementById("mass").value=0;
+document.getElementById("SHM").value="OFF";
+document.getElementById("SHM").removeAttribute("disabled");
+layout([0.238]);
+}
+
+function display_Q3() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">4. Measure the periods of the simple harmonic oscillation as a functiof mass, use linear regression to fit the spring constant k, and compare it with the value determined by the method described previously. g=9.8 m/s<sup>2</sup>. </p>';
+document.getElementById("mass").value=0;
+document.getElementById("SHM").value="OFF";
+document.getElementById("SHM").removeAttribute("disabled");
+layout([0.356]);
+}
+
+var canvasImage;
+ctx.canvas.height=Math.max(window.innerHeight-30, 850);
+ch=cnvs.height
+var springK = 1, ccX=100*parseInt(cw/200), ccY=0, hRun=null;
+var Lmm=280, rmm=50, SHM=false, mass=0, tSHM=0, Lmm_0=0, SHM_a=0, timeX, dt=0.05, dtms=dt*1000;
+
+drawScales();
+
+drawAll();
+
+ctx.beginPath();
+ctx.fillStyle="pink";
+ctx.strokeStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Lab of Simple Harmonic Motion", cw/2, ch/2);
+ctx.strokeText("Welcome to the Virtual Lab of Simple Harmonic Motion", cw/2, ch/2);
+ctx.fillText("Integrated System & Engineering", cw/2, ch/2+50);
+
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work is different.";
+msg += "\n3. Use user interfaces to start SHM and to change the mass.";
+msg += "\n4. Be careful not to run with mass = 0.";
+alert(msg);
+}
+
+function layout(iValues) {
+ springK = iValues[0]; // N/m
+
+ document.getElementById("mass").addEventListener("change", function() {drawAll();});
+
+ document.getElementById("dtms").addEventListener("change", function() {
+   dtms=document.getElementById("dtms").value;
+   dt = dtms/1000;
+ });
+
+ var powerButton = document.getElementById("SHM");
+ powerButton.onclick = function(e) {
+  if (powerButton.value == "OFF") {
+    
+   powerButton.value = "ON";
+   SHM=true;
+   runSHM();
+  }
+  else {
+   powerButton.value = "OFF";
+   SHM=false;
+   hRun = clearInterval(hRun);
+  }
+  drawAll();
+ };
+
+ drawAll();
+}
+
+function runSHM() {
+ // assume mass > 0.
+ omega=Math.sqrt(springK*1000/mass);
+ tSHM = 0;
+ Lmm_0 = 200 + mass*9.8/springK;
+ timeX = ccX + 150;
+ SHM_a = Math.min(mass*9.8/springK/2, (ch-50-Lmm_0)/2);
+ hRun = setInterval(drawAll, dtms);
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ ctx.font="normal 40px Palatino Linotype";
+}
+
+function drawAll() {
+ ctx.putImageData(canvasImage,0,0);
+ if (SHM == true) {
+  Lmm = Lmm_0+SHM_a*Math.sin(omega*tSHM);
+  tSHM += dt;
+  ctx.fillText(tSHM.toFixed(2), timeX, Lmm_0);
+ }
+ else {
+  mass=2*document.getElementById("mass").value;
+  Lmm=200+mass*9.8/springK;
+ }
+
+ ctx.beginPath();
+ ctx.strokeStyle="blue";
+ ctx.moveTo(ccX, ccY);
+ var a, x, y, z;
+ for (let j=0; j<Lmm; j++) {
+  a = 20*Math.PI*j/(Lmm-1);
+  x = rmm*Math.sin(a);
+  y = rmm*Math.cos(a);
+  z = j;
+  ctx.lineTo(x+ccX, 20+y*0.3+z+ccY);
+ }
+ ctx.lineTo(ccX, 20+y*0.3+z+ccY);
+ ctx.lineTo(ccX, 50+ccY+Lmm)
+ ctx.stroke();
+ 
+ ctx.fillStyle="blue";
+ ctx.fillRect(ccX-mass, 50+ccY+Lmm, mass*2, mass*2);
+}
+
+
+function drawScales() {
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.font="normal 14px Palatino Linotype";
+ ctx.textAlign="right";
+ for (y=0; y<ch; y+=10) {
+  ctx.moveTo(ccX-10.5,y+0.5);
+  if (y%100 == 0) {
+   ctx.lineTo(ccX+30.5,y+0.5);
+   ctx.fillText(y, ccX-25,y+6);
+  }
+  else if (y%50 == 0) {
+   ctx.lineTo(ccX+40.5,y+0.5);
+   ctx.fillText(y, ccX-15,y+6);
+  }
+  else ctx.lineTo(ccX+10.5,y+0.5);
+  ctx.stroke();
+ }
+ ctx.fillText("(mm)", ccX-20, 30);
+ canvasImage=ctx.getImageData(0,0,cw,ch);
+}</script>\n</body>\n</html>
