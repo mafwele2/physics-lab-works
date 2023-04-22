@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Force_between_charged_spheres12225258 KOSIMOV SHAMSKAMAR JAHONGIR UGLI_(샴스카마르)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Force_between_charged_spheres12225258 KOSIMOV SHAMSKAMAR JAHONGIR UGLI_(샴스카마르)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+	<input type="button" onclick="javascript:display_Q3();" value="Q-4" /> &emsp;
+&#8592; Select one on the left. &nbsp; 
+D<sub>o</sub> (mm): <input type="number" id="distance" value=500 STYLE="font-size:18px;" min=0 max=1000>
+Charging: <input type="button" id="power" value="OFF" STYLE="background-color: #cce000;">
+Voltage (kV): <input type="number" id="Voltage" value=0 STYLE="font-size:18px;" min=0 max=30>&nbsp; <input type="button" id="pauseBtn" value="help" onclick="displayHelp();"> <a href="https://en.wikipedia.org/wiki/Coulomb%27s_law" target="_blank">Coulomb's law</a>&nbsp; <a href="https://brython.info/tests/editor.html?lang=en" target="_blank">Brython</a><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Measure the magnitude of the electrostatic force acting each other as a function of charging voltage. The sphere on left side is attached to an invible spring with unknown spring constant. Assume that the charges are uniformly distributed over the spherical surfaces. </p>';
+document.getElementById("distance").value=685;
+document.getElementById("distance").setAttribute("disabled", true);
+document.getElementById("Voltage").value=0;
+layout([2.8e-07, 685, 55, 80]);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Find the magnitude of spring restoring force acting on the left conductor as a function of charging voltage. The sphere on left side is attached to an invible spring with unknown spring constant. Assume that the charges are uniformly distributed over the spherical surfaces. </p>';
+document.getElementById("distance").value=705;
+document.getElementById("distance").setAttribute("disabled", true);
+document.getElementById("Voltage").value=0;
+layout([5.5e-07, 705, 55, 50]);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. The sphere on left side is attached to an invible spring with unknown spring constant. Find the spring constant. Assume that the charges are uniformly distributed over the spherical surfaces. </p>';
+document.getElementById("distance").value=610;
+document.getElementById("distance").setAttribute("disabled", true);
+document.getElementById("Voltage").value=0;
+layout([7.1e-07, 610, 45, 100]);
+}
+
+function display_Q3() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">4. This is a challening work. Find the combination of separation and voltage to displace the left one as 40 mm from the origin. The sphere on left side is attached to an invible spring with unknown spring constant. Assume that the charges are uniformly distributed over the spherical surfaces. </p>';
+document.getElementById("distance").value=540;
+document.getElementById("distance").removeAttribute("disabled");
+document.getElementById("Voltage").value=0;
+layout([3.3e-07, 540, 30, 40]);
+}
+
+drawAll({springK: 2e-5, separationD: 50, sphereR: 25});
+
+ctx.beginPath();
+ctx.fillStyle="pink";
+ctx.strokeStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Lab of Coulomb's Law", cw/2, ch/2+200);
+ctx.strokeText("Welcome to the Virtual Lab of Coulomb's Law", cw/2, ch/2+200);
+ctx.fillText("Integrated System & Engineering", cw/2, ch/2+250);
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work requires different task.";
+msg += "\n3. Use user interfaces to charge conducting spheres and to change the separation.";
+msg += "\n4. The conductor on the right is fixed at the given location and the left one, which is attached to an invisible spring whose another end is fixed at the origin, will be displaced at the two forces, spring restoring force and Coulomb force, are balanced.";
+msg += "\n5. Two conductors are identical and charged to the same voltage.";
+alert(msg);
+}
+
+function layout(iPrms) {
+ var conf={springK: iPrms[0], separationD: iPrms[1], sphereR: iPrms[2]};
+ document.getElementById("distance").addEventListener("change", function() {drawAll(conf);});
+ document.getElementById("Voltage").addEventListener("change", function() {drawAll(conf);});
+
+ var powerButton = document.getElementById("power");
+ powerButton.onclick = function(e) {
+  if (powerButton.value == "OFF") {
+   document.getElementById("Voltage").value=0;
+   document.getElementById("Voltage").removeAttribute("disabled");
+   powerButton.value = "ON";
+  }
+  else {
+   document.getElementById("Voltage").value=0;
+   
+   powerButton.value = "OFF";
+  }
+  drawAll(conf);
+ };
+
+ drawAll(conf);
+
+ //ctx.beginPath();
+ //ctx.fillStyle="black";
+ //ctx.font="normal 14px Palatino Linotype";
+ //ctx.textAlign="left";
+ //ctx.fillText(iPrms, 10, 20);
+}
+
+function drawAll(conf) {
+ ctx.clearRect(0,0,cw,ch);
+ var ccX=100*parseInt(cw/200)-300, ccY=Math.max(100*parseInt(ch/400), 100);
+ var r=Number(document.getElementById("distance").value);
+
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.font="normal 14px Palatino Linotype";
+ ctx.textAlign="center";
+ ctx.strokeStyle="black";
+
+ for (let x=10; x<cw; x+=5) {
+  ctx.moveTo(x+0.5, ccY);
+  if ((x-ccX)%100 == 0) {
+   ctx.lineTo(x+0.5, ccY+40);
+   ctx.fillText(x-ccX, x, ccY+55);
+  }
+  else if ((x-ccX)%50 == 0) ctx.lineTo(x+0.5, ccY+40);
+  else if ((x-ccX)%10 == 0) ctx.lineTo(x+0.5, ccY+30);
+  else ctx.lineTo(x+0.5, ccY+25);
+  ctx.stroke(); 
+ }
+ ctx.fillText("(mm)", ccX+25, ccY+55);
+
+ var a, vV=Number(document.getElementById("Voltage").value);
+ if (vV == 0) a=0;
+ else a = -findX(conf.sphereR, r, conf.springK/vV**2/1e6/(4*Math.PI*8.854e-12));
+
+ var grad=ctx.createRadialGradient(ccX+a, ccY, conf.sphereR/10, ccX+a, ccY, conf.sphereR);
+ grad.addColorStop(0, "white");
+ grad.addColorStop(1, "#2285ffaa");
+ 
+ ctx.beginPath();
+ //ctx.fillStyle="#558000aa";
+ ctx.fillStyle=grad;
+ ctx.arc(ccX+a,ccY,conf.sphereR, 0, 2*Math.PI);
+ ctx.fill();
+ ctx.beginPath();
+ ctx.strokeStyle="blue";
+ ctx.moveTo(ccX+a-5,ccY+0.5);
+ ctx.lineTo(ccX+a+5,ccY+0.5);
+ ctx.stroke();
+ ctx.moveTo(ccX+a+0.5,ccY-5.5);
+ ctx.lineTo(ccX+a+0.5,ccY+5.5);
+ ctx.stroke();
+
+ grad=ctx.createRadialGradient(ccX+r, ccY, conf.sphereR/10, ccX+r, ccY, conf.sphereR);
+ grad.addColorStop(0, "white");
+ grad.addColorStop(1, "#2285ffaa");
+
+ ctx.beginPath();
+ //ctx.fillStyle="#558000aa";
+ ctx.fillStyle=grad;
+ ctx.arc(ccX+r,ccY,conf.sphereR, 0, 2*Math.PI);
+ ctx.fill();
+
+ ctx.beginPath();
+ ctx.strokeStyle="#0000ffaa";
+ ctx.moveTo(ccX+r-5,ccY+0.5);
+ ctx.lineTo(ccX+r+5,ccY+0.5);
+ ctx.stroke();
+ ctx.moveTo(ccX+r+0.5,ccY-5.5);
+ ctx.lineTo(ccX+r+0.5,ccY+5.5);
+ ctx.stroke();
+
+}
+
+function findX(ia,iD, kp) {
+ var a=1, b=2*iD, c=iD**2, d=-(ia**2/kp);
+ var Delta0=b**2-3*a*c, Delta1=2*b**3-9*a*b*c+27*a**2*d;
+ var y=(Delta1+(Delta1**2-4*Delta0**3)**0.5)/2;
+ var bigCr=(-y)**(1/3)*Math.cos(Math.PI/3), bigCi=(-y)**(1/3)*Math.sin(Math.PI/3);
+ var newBigCr=bigCr*(-0.5)-bigCi*Math.sqrt(3)/2, newBigCi=bigCi*(-0.5)+bigCr*Math.sqrt(3)/2;
+ return -(b+newBigCr+Delta0*newBigCr/(newBigCr**2+newBigCi**2))/(3*a);
+}</script>\n</body>\n</html>
