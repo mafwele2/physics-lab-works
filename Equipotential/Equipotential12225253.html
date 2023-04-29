@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Equipotential12225253 ABDURASULOV MIRSAID ALIMARDONOVICH_(미르사이드)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Equipotential12225253 ABDURASULOV MIRSAID ALIMARDONOVICH_(미르사이드)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+	<input type="button" onclick="javascript:display_Q3();" value="Q-4" /> &emsp;
+	<input type="button" onclick="javascript:display_Q4();" value="Q-5" /> &emsp;
+&#8592; Select one button. &nbsp; 
+Number of charges: <select id="charges">
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+</select>
+Decimal places: <select id="decimal">
+  <option value="0">0</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+</select>
+Colors: <select id="color">
+  <option value="#f00">red</option>
+  <option value="#0f0">green</option>
+  <option value="#00f">blue</option>
+  <option value="#000">black</option>
+</select>
+<input type="button" id="del" value="delete">&nbsp;<input type="button" id="pauseBtn" value="help" onclick="displayHelp();"> <a href="https://courses.lumenlearning.com/physics/chapter/19-4-equipotential-lines/" target="_blank">Equipotential Lines</a>&nbsp; <a href="https://brython.info/tests/editor.html?lang=en" target="_blank">Brython</a> <br><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Find electric equipotential surfaces in 4 different colors near the single charge shown below. Make the potential differences between surfaces as much identical as possible. </p>';
+var charges=document.getElementById("charges");
+charges.value="1";
+charges.setAttribute("disabled",true);
+document.getElementById("decimal").value="0";
+document.getElementById("color").value="#f00";
+layout([[-2, 20, 12]]);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Find electric equipotential surfaces in 4 different colors near the single charge shown below. Make the potential differences between surfaces as much identical as possible. </p>';
+var charges=document.getElementById("charges");
+charges.value="1";
+charges.setAttribute("disabled",true);
+document.getElementById("decimal").value="0";
+document.getElementById("color").value="#f00";
+layout([[4, 16, 12]]);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Find electric equipotential surfaces in 4 different colors near the 2 point charges shown below. Make the potential differences between surfaces as much identical as possible. </p>';
+var charges=document.getElementById("charges");
+charges.value="2";
+charges.setAttribute("disabled",true);
+document.getElementById("decimal").value="0";
+document.getElementById("color").value="#f00";
+layout([[-3, 4, 16], [-3, 8, 12]]);
+}
+
+function display_Q3() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">4. Find electric equipotential surfaces in 4 different colors near the 2 point charges shown below. Make the potential differences between surfaces as much identical as possible. </p>';
+var charges=document.getElementById("charges");
+charges.value="2";
+charges.setAttribute("disabled",true);
+document.getElementById("decimal").value="0";
+document.getElementById("color").value="#f00";
+layout([[3, 24, 4], [4, 12, 12]]);
+}
+
+function display_Q4() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">5. Find electric equipotential surfaces in 4 different colors near the 2 point charges shown below. Make the potential differences between surfaces as much identical as possible. </p>';
+var charges=document.getElementById("charges");
+charges.value="2";
+charges.setAttribute("disabled",true);
+document.getElementById("decimal").value="0";
+document.getElementById("color").value="#f00";
+layout([[-2, 8, 20], [2, 24, 4]]);
+}
+
+var canvasImage;
+ctx.canvas.height=Math.max(window.innerHeight-100, 500);
+ch=cnvs.height
+
+var points=[], pointsInColor={"#f00":[], "#0f0":[], "#00f": [], "#000":[]}, lastPoint=[];
+
+apparatus();
+
+ctx.beginPath();
+ctx.fillStyle="orange";
+ctx.strokeStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Laboratory of Equipotential Surfaces", cw/2, ch/2);
+ctx.strokeText("Welcome to the Virtual Laboratory of Equipotential Surfaces", cw/2, ch/2);
+ctx.fillText("Integrated System & Engineering", cw/2, ch/2+50);
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work requires different task.";
+msg += "\n3. Use user interfaces to select decimal places and colors of equipotential surfaces.";
+msg += "\n4. As mouse moves on the board, the electrical potential is displayed below the board.";
+msg += "\n5. The numbers inside parathesis are the standard deviations. Select points whose deviations is less than 1.";
+alert(msg);
+}
+
+function layout(iValues) {
+ var charges=[];
+ for (let i=0; i<parseInt(document.getElementById("charges").value); i++) charges.push(iValues[i]);
+
+
+ document.getElementById("del").onclick = function(e) {
+  if (points.length > 0) {
+   var popped=points.pop();
+   pointsInColor[popped[2]].pop();
+   drawAll(charges, points, popped[0], popped[1]);
+  }
+ };
+
+
+ cnvs.onclick = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+  if (pxX < cw-100 && pxY < ch-100) {
+   lastPoint=[pxX,pxY,document.getElementById("color").value,getPotential(charges, pxX, pxY)];
+   points.push(lastPoint);
+   pointsInColor[lastPoint[2]].push(lastPoint);
+   ctx.putImageData(canvasImage,0,0);
+   drawAll(charges, points, pxX, pxY);
+   //displayPotStat(pointsInColor);
+  }
+ }
+
+ cnvs.onmousemove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+  if (pxX < cw-100 && pxY < ch-100) { //drawAll(charges, points, pxX, pxY);
+    ctx.putImageData(canvasImage,0,0);
+    drawAll(charges, points, pxX, pxY);
+  }
+ }
+
+ cnvs.ontouchmove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.touches[0].clientY-bbox.top*(ch/bbox.height);
+
+  if (pxX < cw-100 && pxY < ch-100) { //drawAll(charges, points, pxX, pxY);
+    ctx.putImageData(canvasImage,0,0);
+    drawAll(charges, points, pxX, pxY);
+  }
+ }
+
+ ctx.clearRect(0,0,cw,ch);
+ ctx.beginPath();
+ ctx.fillStyle="#ccc";
+ ctx.fillRect(0,0, cw-100, ch-100);
+
+ ctx.beginPath();
+ ctx.strokeStyle="#eee";
+ ctx.setLineDash([2,4]);
+ for (let x=20; x<cw-100; x+=20) {
+  ctx.moveTo(x+0.5,0.5);
+  ctx.lineTo(x+0.5,ch-100.5);
+  ctx.stroke();
+ }
+ for (let y=20; y<ch-100; y+=20) {
+  ctx.moveTo(0.5,y+0.5);
+  ctx.lineTo(cw-100.5, y+0.5);
+  ctx.stroke();
+ }
+ ctx.setLineDash([]);
+
+ for (let i=0; i<charges.length; i++) displayQ(charges[i]);
+
+ canvasImage=ctx.getImageData(0,0,cw,ch);
+}
+
+function apparatus() {
+ ctx.clearRect(0,0,cw,ch);
+ ctx.beginPath();
+ ctx.fillStyle="#ccc";
+ ctx.fillRect(0,0, cw-100, ch-100);
+
+ ctx.beginPath();
+ ctx.strokeStyle="#eee";
+ ctx.setLineDash([2,4]);
+ for (let x=20; x<cw-100; x+=20) {
+  ctx.moveTo(x+0.5,0.5);
+  ctx.lineTo(x+0.5,ch-100.5);
+  ctx.stroke();
+ }
+ for (let y=20; y<ch-100; y+=20) {
+  ctx.moveTo(0.5,y+0.5);
+  ctx.lineTo(cw-100.5, y+0.5);
+  ctx.stroke();
+ }
+ ctx.setLineDash([]);
+
+ for (let i=0; i<charges.length; i++) displayQ(charges[i]);
+
+ canvasImage=ctx.getImageData(0,0,cw,ch);
+}
+
+function displayPoint(xy) {
+ ctx.beginPath();
+ ctx.fillStyle=xy[2];
+ ctx.arc(xy[0],xy[1],2,0,2*Math.PI);
+ ctx.fill();
+ ctx.closePath();
+}
+
+function moveTip2(x,y) {
+ ctx.beginPath();
+ ctx.fillStyle="green";
+ ctx.moveTo(x,y); ctx.lineTo(x-2.5,y-2.5); ctx.lineTo(x+5.5,y-32.5); ctx.lineTo(x+3.5,y-32.5);
+ ctx.lineTo(x+10.5,y-62.5); ctx.lineTo(x+18.5,y-62.5); ctx.lineTo(x+18.5,y-62.5); ctx.lineTo(x+11.5,y-32.5);
+ ctx.lineTo(x+9.5,y-32.5); ctx.lineTo(x+9.5,y-32.5); ctx.lineTo(x+2.5,y-2.5); ctx.lineTo(x,y);
+ ctx.fill();
+}
+
+function displayQ(q) {
+ ctx.beginPath();
+ if (q[0]>0) ctx.fillStyle="red";
+ else ctx.fillStyle="blue";
+ ctx.arc(q[1]*20,q[2]*20, 10, 0, 2*Math.PI);
+ ctx.fill();
+ 
+ ctx.fillStyle="white";
+ ctx.font="normal 12px Palatino Linotype";
+ ctx.textAlign="center";
+ ctx.fillText(q[0], q[1]*20, q[2]*20+4);
+}
+
+
+function getPotential(charges, x,y) {
+ var potential = 0;
+ for (let i=0; i<charges.length; i++) {
+  potential += charges[i][0]/Math.sqrt((charges[i][1]*20-x)**2+(charges[i][2]*20-y)**2);
+ }
+ return potential*9000;
+}
+
+
+function drawAll(charges, points, tipX, tipY) {
+ moveTip2(tipX, tipY);
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ ctx.font="normal 20px Palatino Linotype";
+ ctx.fillText("Potential="+getPotential(charges, tipX, tipY).toFixed(parseInt(document.getElementById("decimal").value))+" (V)", cw/2, ch-40);
+
+ points.forEach(displayPoint);
+ displayPotStat(pointsInColor);
+}
+
+function displayPotStat(points) {
+ ctx.beginPath();
+ ctx.fillStyle="red";
+ ctx.textAlign="left";
+ ctx.font="normal 20px Palatino Linotype";
+
+ var variance=0, mean=0;
+ [mean, variance] = getMeanNvar(points["#f00"]);
+ ctx.fillText("Red points: "+mean.toFixed(1)+"("+variance.toFixed(1)+")", 50, ch-80);
+
+ ctx.fillStyle="green";
+ [mean, variance] = getMeanNvar(points["#0f0"]);
+ ctx.fillText("Green points: "+mean.toFixed(1)+"("+variance.toFixed(1)+")", 300, ch-80);
+
+ ctx.fillStyle="blue";
+ [mean, variance] = getMeanNvar(points["#00f"]);
+ ctx.fillText("Blue points: "+mean.toFixed(1)+"("+variance.toFixed(1)+")", 550, ch-80);
+
+ ctx.fillStyle="black";
+ [mean, variance] = getMeanNvar(points["#000"]);
+ ctx.fillText("Black points: "+mean.toFixed(1)+"("+variance.toFixed(1)+")", 800, ch-80);
+}
+
+function getMeanNvar(points) {
+ var total=0, mean=0;
+ if (points.length==0) return [0,0]
+ for (let i=0; i<points.length; i++) total += points[i][3];
+ mean = total/points.length;
+ total = 0;
+ for (let i=0; i<points.length; i++) total += (points[i][3]-mean)**2;
+ return [mean, total/points.length];
+}</script>\n</body>\n</html>
