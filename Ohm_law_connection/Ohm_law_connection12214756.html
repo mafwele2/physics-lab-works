@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Ohm_law_connection12214756 RASULOV ELYOR DUSYOR UGLI_(엘요르)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Ohm_law_connection12214756 RASULOV ELYOR DUSYOR UGLI_(엘요르)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+	<input type="button" onclick="javascript:display_Q3();" value="Q-4" /> &emsp;
+&#8592; Select one button on the left and click it. &nbsp; <input type="button" id="pauseBtn" value="help" onclick="displayHelp();"> <a href="https://openpress.usask.ca/physics155/chapter/6-2-resistors-in-series-and-parallel/" target="_blank">Resistors in Series and Parallel</a>
+ℰ (V): <input type="number" id="V" value=0 STYLE="font-size:18px;" min=0 max=100>
+<input type="button" id="power" value="OFF" STYLE="background-color: #cce000;"><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Find the unknown resistance in the circuit below. </p>';
+document.getElementById("V").value=0;
+document.getElementById("power").value="OFF";
+layout4Series([162, 496, 'L']);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Find the unknown resistance in the circuit below. </p>';
+document.getElementById("V").value=0;
+document.getElementById("power").value="OFF";
+layout4Series([199, 521, 'L']);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Find the unknown resistance in the circuit below. </p>';
+document.getElementById("V").value=0;
+document.getElementById("power").value="OFF";
+layout4Parallel([533, 345, 'L']);
+}
+
+function display_Q3() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">4. Find the unknown resistance in the circuit below. </p>';
+document.getElementById("V").value=0;
+document.getElementById("power").value="OFF";
+layout4Parallel([124, 563, 'L']);
+}
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work requires different task.";
+msg += "\n3. Use user interfaces to turn the power on and to change dc voltage values.";
+alert(msg);
+}
+
+function layout4Series(iValues) {
+ document.getElementById("V").addEventListener("change", function() {drawAll4Series(iValues);});
+
+ var powerButton = document.getElementById("power");
+ powerButton.onclick = function(e) {
+  if (powerButton.value == "OFF") powerButton.value = "ON";
+  else {
+   powerButton.value = "OFF";
+   document.getElementById("V").value=0;
+  }
+  drawAll4Series(iValues);
+ };
+
+ drawAll4Series(iValues);
+}
+
+function layout4Parallel(iValues) {
+ document.getElementById("V").addEventListener("change", function() {drawAll4Parallel(iValues);});
+
+ var powerButton = document.getElementById("power");
+ powerButton.onclick = function(e) {
+  if (powerButton.value == "OFF") powerButton.value = "ON";
+  else {
+   powerButton.value = "OFF";
+   document.getElementById("V").value=0;
+  }
+  drawAll4Parallel(iValues);
+ };
+
+ drawAll4Parallel(iValues);
+}
+
+
+function getA(a) {
+ return Number((a*1000).toFixed(2));
+}
+
+
+function drawAll4Series(values) {
+ ctx.clearRect(0,0,cw,ch);
+
+ var VA={V: document.getElementById("V").value,
+         A: getA(document.getElementById("V").value/(values[0]+values[1]))};
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.lineWidth=3;
+ ctx.rect(cw/2-250.5, 90.5, 500, 180);
+ ctx.stroke();
+ ctx.lineWidth=1;
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.fillStyle="#bf8040";
+ ctx.fillRect(cw/2-100.5, 50.5, 200, 70);
+ ctx.rect(cw/2-100.5, 50.5, 200, 70);
+ ctx.stroke();
+
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ ctx.font="normal 20px Palatino Linotype";
+ ctx.fillText("Ammeter", cw/2, 75);
+ 
+ ctx.textAlign="left";
+ ctx.fillText("(mA)", cw/2+20, 110);
+
+ ctx.beginPath();
+ ctx.fillStyle="red";
+ ctx.fillRect(cw/2+200.5, 120.5, 100, 50);
+
+ ctx.fillStyle="red";
+ ctx.fillRect(cw/2+200.5, 190.5, 100, 50);
+
+
+ ctx.fillStyle="white";
+ ctx.textAlign="center";
+ if (values[2] == "L") {
+  ctx.fillText("??? Ω", cw/2+250, 152);
+  ctx.fillText(values[1]+" Ω", cw/2+250, 222);
+ }
+ else {
+  ctx.fillText(values[0]+" Ω", cw/2+250, 152);
+  ctx.fillText("??? Ω", cw/2+250, 222);
+ }
+
+ ctx.beginPath();
+ ctx.fillStyle="#ccc";
+ ctx.fillRect(cw/2-350.5, 115.5, 200, 130);
+
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ ctx.font="normal 20px Palatino Linotype";
+ ctx.fillText("DC Voltage (ℰ)", cw/2-250, 140);
+ ctx.fillText("Power Supply", cw/2-250, 160);
+
+ ctx.beginPath();
+ ctx.fillStyle="#aaa";
+ ctx.fillRect(cw/2-290.5, 200.5, 80, 35);
+ ctx.strokeStyle="black";
+ ctx.rect(cw/2-290.5, 200.5, 80, 35);
+ ctx.stroke();
+
+ //ℰ (V)
+ ctx.textAlign="center";
+ if (document.getElementById("power").value == "ON") {
+  ctx.fillStyle="red";
+  ctx.fillText("ON", cw/2-250, 225);
+
+  ctx.textAlign="right";
+  ctx.fillStyle="red";
+  ctx.fillText(VA.A, cw/2, 110);
+ }
+ else {
+  ctx.fillStyle="black";
+  ctx.fillText("Off", cw/2-250, 225);
+
+  ctx.beginPath();
+  ctx.fillStyle="white";
+  ctx.fillRect(cw/2-230.5, 70.5, 40, 40);
+  ctx.strokeStyle="black";
+  ctx.lineWidth=3;
+  ctx.moveTo(cw/2-230.5, 90.5);
+  ctx.lineTo(cw/2-205.5, 60.5);
+  ctx.stroke();
+ }
+}
+
+function drawAll4Parallel(values) {
+ ctx.clearRect(0,0,cw,ch);
+
+ var VA={V: document.getElementById("V").value,
+         A: getA(document.getElementById("V").value*(1/values[0]+1/values[1]))};
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.lineWidth=3;
+ ctx.rect(cw/2-250.5, 90.5, 500, 180);
+ ctx.stroke();
+ ctx.rect(cw/2+250, 90.5, 160, 180);
+ ctx.stroke();
+ ctx.lineWidth=1;
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.fillStyle="#bf8040";
+ ctx.fillRect(cw/2-100.5, 50.5, 200, 70);
+ ctx.rect(cw/2-100.5, 50.5, 200, 70);
+ ctx.stroke();
+
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ ctx.font="normal 20px Palatino Linotype";
+ ctx.fillText("Ammeter", cw/2, 75);
+ 
+ ctx.font="normal 24px Palatino Linotype";
+
+ if (document.getElementById("power").value == "ON") {
+  ctx.textAlign="right";
+  ctx.fillStyle="red";
+  ctx.fillText(VA.A, cw/2, 110);
+ }
+
+ ctx.textAlign="left";
+ ctx.fillStyle="black";
+ ctx.fillText("(mA)", cw/2+20, 110);
+
+ ctx.beginPath();
+ ctx.fillStyle="red";
+ ctx.fillRect(cw/2+200.5, 150.5, 100, 50);
+
+ ctx.fillStyle="red";
+ ctx.fillRect(cw/2+360.5, 150.5, 100, 50);
+
+
+ ctx.fillStyle="white";
+ ctx.textAlign="center";
+ if (values[2] == "L") {
+  ctx.fillText("??? Ω", cw/2+250, 182);
+  ctx.fillText(values[1]+" Ω", cw/2+410, 182);
+ }
+ else {
+  ctx.fillText(values[0]+" Ω", cw/2+250, 182);
+  ctx.fillText("??? Ω", cw/2+410, 182);
+ }
+
+ ctx.beginPath();
+ ctx.fillStyle="#ccc";
+ ctx.fillRect(cw/2-350.5, 115.5, 200, 130);
+
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ ctx.font="normal 20px Palatino Linotype";
+ ctx.fillText("DC Voltage (ℰ)", cw/2-250, 140);
+ ctx.fillText("Power Supply", cw/2-250, 160);
+
+ ctx.beginPath();
+ ctx.fillStyle="#aaa";
+ ctx.fillRect(cw/2-290.5, 200.5, 80, 35);
+ ctx.strokeStyle="black";
+ ctx.rect(cw/2-290.5, 200.5, 80, 35);
+ ctx.stroke();
+
+ //ℰ (V)
+ ctx.textAlign="center";
+ if (document.getElementById("power").value == "ON") {
+  ctx.fillStyle="red";
+  ctx.fillText("ON", cw/2-250, 225);
+ }
+ else {
+  ctx.fillStyle="black";
+  ctx.fillText("Off", cw/2-250, 225);
+
+  ctx.beginPath();
+  ctx.fillStyle="white";
+  ctx.fillRect(cw/2-230.5, 70.5, 40, 40);
+  ctx.strokeStyle="black";
+  ctx.lineWidth=3;
+  ctx.moveTo(cw/2-230.5, 90.5);
+  ctx.lineTo(cw/2-205.5, 60.5);
+  ctx.stroke();
+ }
+}
+
+
+drawAll4Series([0,0,"L"]);
+ctx.beginPath();
+ctx.fillStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Lab for Ohm's Law", cw/2, ch/2);
+ctx.fillText("Integrated System & Engineering", cw/2, ch/2+50);</script>\n</body>\n</html>
