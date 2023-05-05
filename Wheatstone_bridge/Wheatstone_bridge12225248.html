@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Wheatstone_bridge12225248 KAKHORJONOV MANSURBEK TOKHIRJON UGLI_(만수르벡)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Wheatstone_bridge12225248 KAKHORJONOV MANSURBEK TOKHIRJON UGLI_(만수르벡)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+&#8592; Select one button on the left. &nbsp; <input type="button" id="pauseBtn" value="help" onclick="displayHelp();"> <a href="https://en.wikipedia.org/wiki/Wheatstone_bridge" target="_blank">Wheatston bridge</a>
+ℰ (V): <input type="number" id="V" value=0 STYLE="font-size:18px;" min=0 max=100>
+Power: <input type="button" id="power" value="OFF" STYLE="background-color: #cce000;"><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Find the unknown resistance in the circuit below. </p>';
+document.getElementById("V").value=0;
+document.getElementById("power").value="OFF";
+layout([331, 493, 950, 'L']);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Find the unknown resistance in the circuit below. </p>';
+document.getElementById("V").value=0;
+document.getElementById("power").value="OFF";
+layout([218, 493, 650, 'R']);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Find the unknown resistance in the circuit below. </p>';
+document.getElementById("V").value=0;
+document.getElementById("power").value="OFF";
+layout([334, 408, 1050, 'R']);
+}
+
+drawAll([0,0,0,"L"], 0, 0);
+
+ctx.beginPath();
+ctx.fillStyle="pink";
+ctx.strokeStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Lab of Wheatstone Bridge Circuit", cw/2, ch-150);
+ctx.strokeText("Welcome to the Virtual Lab of Wheatstone Bridge Circuit", cw/2, ch-150);
+ctx.fillText("Integrated System & Engineering", cw/2, ch-100);
+
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work requires different task.";
+msg += "\n3. Use user interfaces to turn the power on and to change dc voltage values.";
+msg += "\n4. The zero reading on Ammeter indicates that the bridge is balanced.";
+msg += "\n5. To achieve the balanced bridge, move mouse horizontally while pressing down within the red triangle probe below.";
+alert(msg);
+}
+
+function layout(iValues) {
+ var ccX=100*parseInt(cw/200);
+ var mouseX=0, dx=0, probe=50;
+ document.getElementById("V").addEventListener("change", function() {drawAll(iValues, probe, dx);});
+
+ var powerButton = document.getElementById("power");
+ powerButton.onclick = function(e) {
+  if (powerButton.value == "OFF") powerButton.value = "ON";
+  else {
+   powerButton.value = "OFF";
+   document.getElementById("V").value=0;
+  }
+  drawAll(iValues, probe, dx);
+ };
+
+ cnvs.ontouchend = function(e) {
+  e.preventDefault();
+  dragging=false;
+ }
+
+ cnvs.onmouseup = function(e) {
+  e.preventDefault();
+  dragging=false;
+ }
+
+ cnvs.ontouchstart = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.touches[0].clientY-bbox.top*(ch/bbox.height);
+  
+  if (document.getElementById("meter").value == "able") {
+   //ctx.fillStyle="black";
+   //ctx.font="normal 20px Palatino Linotype";
+   //ctx.textAlign="center";
+   //ctx.clearRect(50,530,500,620);
+   //ctx.fillText(jaws.L+", "+jaws.R+", "+pxX+", "+pxY, 200,600);
+   if (445 < pxY && pxY < 470 && ccX+probe-20<pxX && pxX<ccX+probe+20) {
+    dragging=true;
+    mouseX=pxX;
+   }
+  }
+ }
+
+ cnvs.onmousedown = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+  
+  //ctx.fillStyle="black";
+  //ctx.font="normal 20px Palatino Linotype";
+  //ctx.textAlign="center";
+  //ctx.clearRect(50,560,500,620);
+  //ctx.fillText(pxX+", "+pxY, 200,600);
+  if (445 < pxY && pxY < 470 && ccX+probe-20<pxX && pxX<ccX+probe+20) {
+   dragging=true;
+   mouseX=pxX;
+  }
+ }
+
+ cnvs.ontouchmove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.touches[0].clientY-bbox.top*(ch/bbox.height);
+
+  if (dragging == true && 445 < pxY && pxY < 470 && ccX+probe-20<pxX && pxX<ccX+probe+20 && ccX-70<pxX && pxX<ccX+170) {
+   probe = drawAll(iValues, probe, pxX-mouseX);
+   mouseX = pxX;
+   //ctx.fillStyle="black";
+   //ctx.font="normal 40px Palatino Linotype";
+   //ctx.textAlign="center";
+   //ctx.clearRect(0,530,600,620);
+   //ctx.fillText(jaws.L+", "+jaws.R+", "+pxX, 200,600);
+  }
+ }
+
+ cnvs.onmousemove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+
+  if (dragging == true && 445 < pxY && pxY < 470 && ccX+probe-20<pxX && pxX<ccX+probe+20 && ccX-70<pxX && pxX<ccX+170) {
+   probe = drawAll(iValues, probe, pxX-mouseX);
+   mouseX = pxX;
+   //ctx.fillStyle="black";
+   //ctx.font="normal 40px Palatino Linotype";
+   //ctx.textAlign="center";
+   //ctx.clearRect(0,560,600,620);
+   //ctx.fillText(probe+", "+pxX, 200,600);
+  }
+ }
+
+ drawAll(iValues, 50, 0);
+ //ctx.fillStyle="black";
+ //ctx.font="normal 40px Palatino Linotype";
+ //ctx.textAlign="center";
+ //ctx.clearRect(0,560,600,620);
+ //ctx.fillText(iValues, 200,600);
+}
+
+
+function getA(a) {
+ return Number((a*1000).toFixed(2));
+}
+
+
+
+function drawAll(values, probe, dx) {
+ ctx.clearRect(0,0,cw,ch);
+ probe += dx;
+ var ccX=100*parseInt(cw/200), ccY=100*parseInt(ch/400);
+
+ var R3=values[2]*(probe+70)/240,
+    R4=values[2]-R3,
+    R1=values[0],
+    R2=values[1],
+    Emf=document.getElementById("V").value, i2=(Emf*R3+Emf*R1*(R1+R3+R1*R3)/(R1*R2+R1*R3+R2*R3))/(R1+R3+R1*R3+R4*(R1+R3)-(R1+R3+R1*R3)**2/(R1*R2+R1*R3+R2*R3)),
+
+    i1=(Emf*R1+(R1+R3+R1*R3)*i2)/(R1*R2+R1*R3+R2*R3);
+
+ var VA={V: Emf, A: getA(i2-i1)};
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.lineWidth=3;
+ ctx.moveTo(ccX-230, 50);
+ ctx.lineTo(ccX-250, 50);
+ ctx.lineTo(ccX-250,550);
+ //ctx.lineTo(ccX+50, 550);
+ ctx.stroke();
+
+ ctx.moveTo(ccX+50, 100);
+ ctx.lineTo(ccX+50, 50);
+ ctx.lineTo(ccX-190,50);
+ ctx.stroke();
+
+
+ ctx.beginPath();
+ ctx.fillStyle="white";
+ ctx.fillRect(ccX-100, 100, 300, 300);
+ ctx.rect(ccX-100, 100, 300, 300);
+ ctx.stroke();
+
+ ctx.moveTo(ccX-100, 250);
+ ctx.lineTo(ccX+200, 250);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.fillStyle="#ddd";
+ ctx.fillRect(ccX-350, 240, 200, 110);
+
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ ctx.font="normal 20px Palatino Linotype";
+ ctx.fillText("DC Voltage (ℰ)", ccX-250, 265);
+ ctx.fillText("Power Supply", ccX-250, 285);
+
+ ctx.beginPath();
+ ctx.fillStyle="#aaa";
+ ctx.fillRect(ccX-290.5, 300.5, 80, 35);
+ ctx.strokeStyle="black";
+ ctx.rect(ccX-290.5, 300.5, 80, 35);
+ ctx.lineWidth=1;
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.fillStyle="red";
+ ctx.lineWidth=3;
+ ctx.moveTo(ccX-250,550);
+ ctx.lineTo(ccX+probe,550);
+ ctx.lineTo(ccX+probe,475);
+ ctx.lineTo(ccX+probe+30,475);
+ ctx.lineTo(ccX+probe, 415);
+ ctx.lineTo(ccX+probe-30,475);
+ ctx.lineTo(ccX+probe,475);
+ ctx.lineTo(ccX+probe,550);
+ ctx.fill();
+ ctx.stroke();
+ ctx.lineWidth=1;
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.fillStyle="#bf8040";
+ ctx.fillRect(ccX-50, 220, 200, 60);
+ ctx.rect(ccX-50, 220, 200, 60);
+ ctx.stroke();
+
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ ctx.font="normal 20px Palatino Linotype";
+ ctx.fillText("Ammeter", ccX+50, 245);
+ 
+ ctx.textAlign="left";
+ ctx.fillText("(mA)", ccX+60, 270);
+
+ ctx.beginPath();
+ ctx.fillStyle="red";
+ ctx.fillRect(ccX-75, 80, 100, 40);
+ ctx.fillRect(ccX+75, 80, 100, 40);
+ ctx.fillRect(ccX-70, 375, 240, 40);
+
+ ctx.fillStyle="white";
+ ctx.textAlign="center";
+ if (values[3] == "L") {
+  ctx.fillText("??? Ω", ccX-25, 105);
+  ctx.fillText(values[1]+" Ω", ccX+125, 105);
+ }
+ else {
+  ctx.fillText(values[0]+" Ω", ccX-25, 105);
+  ctx.fillText("??? Ω", ccX+125, 105);
+ }
+ ctx.fillText(R3.toFixed(2)+" Ω", ccX-25, 400);
+ ctx.fillText(R4.toFixed(2)+" Ω", ccX+125, 400);
+
+ ctx.beginPath();
+ //ℰ (V)
+ ctx.textAlign="center";
+ if (document.getElementById("power").value == "ON") {
+  ctx.fillStyle="red";
+  ctx.fillText("ON", ccX-250, 325);
+
+  ctx.textAlign="right";
+  ctx.fillStyle="red";
+  ctx.fillText(VA.A, ccX+55, 270);
+
+  ctx.strokeStyle="black";
+  ctx.lineWidth=3;
+  ctx.moveTo(ccX-230, 50);
+  ctx.lineTo(ccX-190, 50);
+  ctx.stroke();
+  ctx.lineWidth=1;
+
+ }
+ else {
+  ctx.fillStyle="black";
+  ctx.fillText("Off", ccX-250, 325);
+
+  ctx.beginPath();
+  ctx.strokeStyle="black";
+  ctx.lineWidth=3;
+  ctx.moveTo(ccX-230, 50);
+  ctx.lineTo(ccX-205, 20);
+  ctx.stroke();
+  ctx.lineWidth=1;
+ }
+ return probe;
+}</script>\n</body>\n</html>
