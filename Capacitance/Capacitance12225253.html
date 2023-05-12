@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Capacitance12225253 ABDURASULOV MIRSAID ALIMARDONOVICH_(미르사이드)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Capacitance12225253 ABDURASULOV MIRSAID ALIMARDONOVICH_(미르사이드)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+&#8592; Select one button on the left. &nbsp;
+
+Plate area (mm<sup>2</sup>): <input type="number" id="area" value=0 STYLE="font-size:18px;" min=0 max=30>
+DC Power: <input type="button" id="power" value="OFF" STYLE="background-color: #cce000;">
+Voltage (kV): <input type="number" id="Voltage" value=0 STYLE="font-size:18px;" min=0 max=30>&nbsp;
+Help: <input type="button" id="pauseBtn" value="help" onclick="displayHelp();"> <a href="https://www.emworks.com/application/force-on-a-capacitor" target="_blank">Force on a Capacitor</a> <br><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Find the micrometer reading for zero-gap between the plates. </p>';
+values=[3201, 10499, -1, -3.8]
+document.getElementById("area").value=values[1];
+document.getElementById("area").setAttribute("disabled", true);
+document.getElementById("power").value="OFF";
+document.getElementById("power").setAttribute("disabled", true);
+document.getElementById("Voltage").value=0;
+document.getElementById("Voltage").setAttribute("disabled", true);
+layout(values);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Find the forces between plates as a function of gap with the fixed voltage. </p>';
+values=[4971, 9620, 0, -1.2]
+document.getElementById("area").value=values[1];
+document.getElementById("area").setAttribute("disabled", true);
+document.getElementById("power").value="OFF";
+document.getElementById("power").removeAttribute("disabled");
+document.getElementById("Voltage").value=0;
+document.getElementById("Voltage").removeAttribute("disabled");
+layout(values);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Find the forces between plates as a function of gap with the fixed voltage. </p>';
+values=[4416, 9086, 4, -2.5]
+document.getElementById("area").value=values[1];
+document.getElementById("area").removeAttribute("disabled");
+document.getElementById("power").value="OFF";
+document.getElementById("power").removeAttribute("disabled");
+document.getElementById("Voltage").value=0;
+document.getElementById("Voltage").removeAttribute("disabled");
+layout(values);
+}
+
+var zero=0, xtra=0, spindleY=370+xtra, knobY=spindleY-(400-268), weight0=123.4, cableColor="black", area=0, voltage=0, ccX=100*parseInt(cw/200)-100, dragging=false, weight;
+var gradient=ctx.createLinearGradient(ccX-45, 0, ccX+45, 0);
+gradient.addColorStop(0, "#777");
+gradient.addColorStop(0.5, "white");
+gradient.addColorStop(1, "#777");
+
+
+drawAll();
+
+ctx.beginPath();
+ctx.fillStyle="pink";
+ctx.strokeStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Lab of Capacitor", cw/2, ch-100);
+ctx.strokeText("Welcome to the Virtual Lab of Capacitor", cw/2, ch-100);
+ctx.fillText("Integrated System & Engineering", cw/2, ch-50);
+
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work requires different task.";
+msg += "\n3. Use user interfaces to turn the power on and to change dc power voltage values.";
+msg += "\n4. Move mouse horizontally while pressing down within the micrometer head to move the spindle vertically.";
+msg += "\n5. Red screen with 'BOOM !!' means negative scale reading.";
+alert(msg);
+}
+
+
+function layout(iPrms) {
+ weight0=iPrms[0];
+ area=iPrms[1];
+ xtra=iPrms[2];
+ zero=iPrms[3];
+ //weight0=0, area=10000, zero=0;
+ spindleY=370+xtra, knobY=spindleY-(400-268);
+ cableColor="black";
+
+ document.getElementById("Voltage").addEventListener("change", function() {drawAll();});
+
+ var powerButton = document.getElementById("power");
+ powerButton.onclick = function(e) {
+  if (powerButton.value == "OFF") {
+   powerButton.value = "ON";
+   cableColor="red";
+  }
+  else {
+   powerButton.value = "OFF";
+   cableColor="black";
+   document.getElementById("Voltage").value=0;
+  }
+  drawAll();
+ };
+
+ cnvs.onmouseup = function(e) {
+  e.preventDefault();
+  dragging=false;
+ }
+
+ cnvs.ontouchend = function(e) {
+  e.preventDefault();
+  dragging=false;
+ }
+
+ cnvs.onmousedown = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+  if (ccX-45 < pxX && pxX < ccX+45) {
+   dragging=true;
+   mouseX=pxX;
+  }
+ }
+
+ cnvs.ontouchstart = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.touches[0].clientY-bbox.top*(ch/bbox.height);
+  
+  if (ccX-45 < pxX && pxX < ccX+45) {
+   dragging=true;
+   mouseX=pxX;
+  }
+ }
+
+
+ cnvs.onmousemove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.clientY-bbox.top*(ch/bbox.height);
+
+  if (dragging == true && ccX-45 < pxX && pxX < ccX+45 && spindleY-292 < pxY && pxY < spindleY-212 && 400+zero>=spindleY-(pxX-mouseX)/10) {
+   spindleY -= (pxX-mouseX)/10;
+   knobY=spindleY-(400-268);
+   drawAll();
+   mouseX = pxX;
+  }
+ }
+
+ cnvs.ontouchmove = function(e) {
+  e.preventDefault();
+  var bbox = cnvs.getBoundingClientRect();
+  var pxX=e.touches[0].clientX-bbox.left*(cw/bbox.width);
+  var pxY=e.touches[0].clientY-bbox.top*(ch/bbox.height);
+
+  if (dragging == true && ccX-45 < pxX && pxX < ccX+45 && spindleY-292 < pxY && pxY < spindleY-212 && 400+zero>=spindleY-(pxX-mouseX)/10) {
+   spindleY -= (pxX-mouseX)/10;
+   knobY=spindleY-(400-268);
+   drawAll();
+   mouseX = pxX;
+  }
+ }
+
+
+ drawAll();
+}
+
+
+function drawAll() {
+ kV=document.getElementById("Voltage").value;
+ ctx.clearRect(0,0,cw,ch);
+
+ ctx.beginPath(); // spindle
+ ctx.fillStyle="brown";
+ ctx.fillRect(ccX-15,spindleY-140, 30,140);
+
+ ctx.beginPath(); // case
+ ctx.strokeStyle="#66b3ff";
+ ctx.lineWidth=20;
+ ctx.rect(ccX-220, 290, 440, 300);
+ ctx.stroke();
+ ctx.lineWidth=1;
+
+ ctx.beginPath();
+ ctx.fillStyle="#aaa";
+ ctx.moveTo(ccX-25,300); ctx.lineTo(ccX-27,298); ctx.lineTo(ccX-27,282); ctx.lineTo(ccX-25,280); ctx.lineTo(ccX+25,280); ctx.lineTo(ccX+27,282); ctx.lineTo(ccX+27,298); ctx.lineTo(ccX+25,300); ctx.lineTo(ccX+25,300); ctx.fill();
+
+ ctx.beginPath();
+ ctx.fillStyle=gradient;
+ ctx.fillRect(ccX-25.5,160, 50,120);
+ ctx.strokeStyle="black";
+ ctx.rect(ccX-25.5,160, 50,120);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.moveTo(ccX-0.5,280);
+ ctx.lineTo(ccX-0.5,160);
+ ctx.stroke();
+
+ var j;
+ ctx.fillStyle="black";
+ ctx.font="normal 12px Palatino Linotype";
+ ctx.textAlign="center";
+ ctx.beginPath();
+ for (let i=0; i<10; i++) {
+  j=268.5-i*10;
+  ctx.moveTo(ccX-10, j);
+  ctx.lineTo(ccX,j);
+  ctx.stroke();
+
+  ctx.fillText(i, ccX-17, j+5);
+
+  ctx.moveTo(ccX,j+5);
+  ctx.lineTo(ccX+9,j+5);
+  ctx.stroke();
+ }
+
+ ctx.beginPath();
+ ctx.fillStyle=gradient;
+ ctx.strokeStyle="black";
+ ctx.rect(ccX-55, knobY-160, 110, 80);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.moveTo(ccX-35, knobY); ctx.lineTo(ccX-55, knobY-80); ctx.lineTo(ccX+55, knobY-80); ctx.lineTo(ccX+35, knobY); ctx.lineTo(ccX-35, knobY); ctx.fill(); ctx.stroke();
+
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.font="normal 12px Palatino Linotype";
+ ctx.fillText("0.01 mm", ccX-5, knobY-145);
+
+ ctx.beginPath();
+ ctx.fillStyle=gradient;
+ ctx.strokeStyle="black";
+ ctx.rect(ccX-15, knobY-180, 30, 20);
+ ctx.fill(); ctx.stroke();
+
+ ctx.rect(ccX-20, knobY-220, 40, 40);
+ ctx.fill(); ctx.stroke();
+
+ ctx.beginPath();
+ ctx.fillStyle="#ccc";
+ ctx.fillRect(ccX-20,spindleY+1, 40, 8);
+
+ ctx.beginPath();
+ ctx.fillStyle="blue";
+ ctx.fillRect(ccX-150,spindleY+10, 300, 20);
+
+ ctx.beginPath();
+ ctx.fillStyle="blue";
+ ctx.fillRect(ccX-150,430+zero, 300, 20);
+
+ var coord1 = spindleY-132;
+ var fraction = (ccX-32 - coord1)%10;
+ var centerV = parseInt(10*fraction);
+
+ if (centerV>44) centerV -= 50;
+
+ var v, j;
+ for (let i=0; i<15; i++) {
+  v = 7-i+centerV;
+  if (v<0) v += 50;
+  j = i*4+ccX-28.5;
+  if (v%5 == 0) {
+   ctx.beginPath();
+   ctx.strokeStyle="black";
+   ctx.moveTo(j, coord1);
+   ctx.lineTo(j, coord1-20);
+   ctx.stroke();
+
+   ctx.fillStyle="black";
+   ctx.font="normal 12px Palatino Linotype";
+   ctx.fillText(v, j-5, coord1-25);
+  }
+  else {
+   ctx.beginPath();
+   ctx.strokeStyle="black";
+   ctx.moveTo(j, coord1);
+   ctx.lineTo(j, coord1-15);
+   ctx.stroke();
+  }
+ }
+
+
+ ctx.beginPath();
+ ctx.fillStyle="#ccc";
+ ctx.fillRect(ccX-100, 451+zero, 200, 28-zero);
+
+ ctx.beginPath();
+ ctx.fillStyle="#99ccff";
+ ctx.strokeStyle="black";
+ ctx.rect(ccX-150, 480, 300, 100);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.fillStyle="black";
+ ctx.font="normal 14px Palatino Linotype";
+ ctx.textAlign="center";
+ ctx.fillText("Precision Scale", ccX-100, 495);
+
+ ctx.beginPath();
+ ctx.fillStyle="white";
+ ctx.fillRect(ccX-100, 510, 200, 40);
+/*
+ ctx.fillStyle="black";
+ ctx.font="normal 30px Palatino Linotype";
+ ctx.fillText(weight0.toFixed(2)+" g", ccX, 540);
+*/
+ ctx.beginPath();
+ ctx.fillStyle="#99ccff";
+ ctx.rect(ccX+280, 470, 240, 90);
+ ctx.fill(); ctx.stroke();
+
+ ctx.fillStyle="black";
+ ctx.font="normal 14px Palatino Linotype";
+ ctx.fillText("DC Power supply", ccX+400, 550);
+
+ ctx.beginPath();
+ ctx.lineWidth=2;
+ ctx.strokeStyle=cableColor;
+ ctx.moveTo(ccX+150,440+zero); ctx.lineTo(ccX+209,440+zero); ctx.stroke();
+ ctx.moveTo(ccX+231,440+zero); ctx.lineTo(ccX+310,440+zero); ctx.lineTo(ccX+310,510);
+ ctx.lineTo(ccX+350, 510); ctx.stroke();
+
+ ctx.beginPath();
+ ctx.lineWidth=3;
+ ctx.moveTo(ccX+350, 490);
+ ctx.lineTo(ccX+350, 530);
+ ctx.stroke();
+
+ ctx.moveTo(ccX+360, 500);
+ ctx.lineTo(ccX+360, 520);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.lineWidth=2;
+ ctx.moveTo(ccX+360,510); ctx.lineTo(ccX+400,510);
+ 
+ weight=weight0;
+ if (cableColor=="red") {
+  ctx.lineTo(ccX+490, 510);
+  weight -= 0.4427*area*(kV/(400+zero-spindleY))**2
+ }
+ else ctx.lineTo(ccX+490, 490);
+ ctx.stroke();
+
+ weight /= 9.8;
+ ctx.fillStyle="black";
+ ctx.font="normal 30px Palatino Linotype";
+ ctx.textAlign="center";
+ ctx.fillText(weight.toFixed(2)+" g", ccX, 540);
+ //ctx.fillText(400+zero-spindleY, ccX, ch-100);
+
+ ctx.fillStyle=cableColor;
+ ctx.moveTo(ccX+150,spindleY+20); ctx.lineTo(ccX+209,spindleY+20); ctx.stroke();
+
+ ctx.moveTo(ccX+231,spindleY+20); ctx.lineTo(ccX+560,spindleY+20); ctx.lineTo(ccX+560,510); ctx.lineTo(ccX+490,510); ctx.stroke();
+
+ ctx.beginPath(); ctx.fillStyle="white"; ctx.strokeStyle=cableColor; 
+ ctx.arc(ccX+310, 510, 10, 0, 2*Math.PI);  ctx.fill(); ctx.stroke();
+ ctx.beginPath(); ctx.arc(ccX+400, 510, 10, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
+ ctx.beginPath(); ctx.arc(ccX+490, 510, 10, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
+
+ if (weight<0) {
+  ctx.fillStyle="red";
+  ctx.fillRect(ccX-400, 100, 800, 600);
+  ctx.fillStyle="white";
+  ctx.font="normal 80px Palatino Linotype";
+  ctx.textAlign="center";
+  ctx.fillText("BOOM !!!", ccX, 450);
+ }
+}</script>\n</body>\n</html>
