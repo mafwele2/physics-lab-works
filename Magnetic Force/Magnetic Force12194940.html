@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Magnetic Force12194940 THAPA PRADIP_(타파프래딥)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Magnetic Force12194940 THAPA PRADIP_(타파프래딥)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+	<input type="button" onclick="javascript:display_Q3();" value="Q-4" /> &emsp;
+	<input type="button" onclick="javascript:display_Q4();" value="Q-5" /> &emsp;
+	<input type="button" onclick="javascript:display_Q5();" value="Q-6" /> &emsp;
+	<input type="button" onclick="javascript:display_Q6();" value="Q-7" /> &emsp;
+	<input type="button" onclick="javascript:display_Q7();" value="Q-8" /> &emsp;
+&#8592; Click one on the left. &nbsp; 
+Cable: <select id="cable">
+  <option value="parallel">parallel</option>
+  <option value="cross">cross</option>
+</select>
+WireL (mm):<input type="number" id="wireL" value=400 STYLE="font-size:18px;" min=300 max=500>
+Power: <input type="button" id="power" value="OFF" STYLE="background-color: #cce000;">
+Current (A):<input type="number" id="current" value=0 STYLE="font-size:18px;" min=0 max=50> &nbsp; 
+<input type="button" id="pauseBtn" value="help" onclick="displayHelp();"><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Find the magnitude of the B field between magnets. The spring constant k = 1 N/m. </p>';
+var values=[387, 2.02, 1, 1, 5.1];
+document.getElementById("wireL").value=values[0];
+document.getElementById("wireL").setAttribute("disabled",true);
+document.getElementById("cable").value="parallel";
+document.getElementById("cable").setAttribute("disabled",true);
+document.getElementById("power").value="OFF";
+document.getElementById("current").value=0;
+document.getElementById("current").removeAttribute("disabled");
+layout([values[0], values[1], 0, 0]);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Find the magnitude of the B field between magnets. The spring constant k = 1 N/m. </p>';
+var values=[450, 4.08, 1, 1, 5.9];
+document.getElementById("wireL").value=values[0];
+document.getElementById("wireL").setAttribute("disabled",true);
+document.getElementById("cable").value="cross";
+document.getElementById("cable").setAttribute("disabled",true);
+document.getElementById("power").value="OFF";
+document.getElementById("current").value=0;
+document.getElementById("current").removeAttribute("disabled");
+layout([values[0], values[1], 0, 1]);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Find the magnitude of the B field between magnets. The spring constant k = 1 N/m. </p>';
+var values=[327, 5.34, 1, 0, 8.9];
+document.getElementById("wireL").value=values[0];
+document.getElementById("wireL").setAttribute("disabled",true);
+document.getElementById("cable").value="parallel";
+document.getElementById("cable").setAttribute("disabled",true);
+document.getElementById("power").value="OFF";
+document.getElementById("current").value=0;
+document.getElementById("current").removeAttribute("disabled");
+layout([values[0], values[1], 1, 0]);
+}
+
+function display_Q3() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">4. Find the magnitude of the B field between magnets. The spring constant k = 1 N/m. </p>';
+var values=[415, 3.52, 1, 0, 9.8];
+document.getElementById("wireL").value=values[0];
+document.getElementById("wireL").setAttribute("disabled",true);
+document.getElementById("cable").value="cross";
+document.getElementById("cable").setAttribute("disabled",true);
+document.getElementById("power").value="OFF";
+document.getElementById("current").value=0;
+document.getElementById("current").removeAttribute("disabled");
+layout([values[0], values[1], 1, 1]);
+}
+
+function display_Q4() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">5. Find the magnitude of the B field between magnets. The spring constant k = 1 N/m. </p>';
+var values=[416, 3.88, 1, 0, 8.2];
+document.getElementById("wireL").value=values[0];
+document.getElementById("wireL").removeAttribute("disabled");
+document.getElementById("cable").value="parallel";
+document.getElementById("cable").setAttribute("disabled",true);
+document.getElementById("power").value="OFF";
+document.getElementById("current").value=values[4];
+document.getElementById("current").setAttribute("disabled",true);
+layout([values[0], values[1], 0, 0, values[4]]);
+}
+
+function display_Q5() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">6. Find the magnitude of the B field between magnets. The spring constant k = 1 N/m. </p>';
+var values=[436, 3.42, 0, 1, 7.3];
+document.getElementById("wireL").value=values[0];
+document.getElementById("wireL").removeAttribute("disabled");
+document.getElementById("cable").value="cross";
+document.getElementById("cable").setAttribute("disabled",true);
+document.getElementById("power").value="OFF";
+document.getElementById("current").value=values[4];
+document.getElementById("current").setAttribute("disabled",true);
+layout([values[0], values[1], 0, 1, values[4]]);
+}
+
+function display_Q6() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">7. Find the magnitude of the B field between magnets. The spring constant k = 1 N/m. </p>';
+var values=[371, 3.98, 1, 0, 8.9];
+document.getElementById("wireL").value=values[0];
+document.getElementById("wireL").removeAttribute("disabled");
+document.getElementById("cable").value="parallel";
+document.getElementById("cable").setAttribute("disabled",true);
+document.getElementById("power").value="OFF";
+document.getElementById("current").value=values[4];
+document.getElementById("current").setAttribute("disabled",true);
+layout([values[0], values[1], 1, 0, values[4]]);
+}
+
+function display_Q7() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">8. Find the magnitude of the B field between magnets. The spring constant k = 1 N/m. </p>';
+var values=[309, 4.34, 0, 1, 5.2];
+document.getElementById("wireL").value=values[0];
+document.getElementById("wireL").removeAttribute("disabled");
+document.getElementById("cable").value="cross";
+document.getElementById("cable").setAttribute("disabled",true);
+document.getElementById("power").value="OFF";
+document.getElementById("current").value=values[4];
+document.getElementById("current").setAttribute("disabled",true);
+layout([values[0], values[1], 1, 1, values[4]]);
+}
+
+var Bfield=150, wireL=400, NandS=0;
+var ccX=100*parseInt(cw/200)-50, ccY=Math.max(100*parseInt(ch/400)-100,40);
+
+drawAll();
+
+ctx.beginPath();
+ctx.fillStyle="pink";
+ctx.strokeStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Lab of Magnetic Force on Wire", cw/2, ch-120);
+ctx.strokeText("Welcome to the Virtual Lab of Magnetic Force on Wire", cw/2, ch-120);
+ctx.fillText("Integrated System & Engineering", cw/2, ch-70);
+
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work requires different task.";
+msg += "\n3. Use user interfaces to turn the power on and to change values.";
+msg += "\n4. Springs are initially balanced with the wire weight. The additional magnetic force acting on the wire, depending on the B-field, current, and the length of the wire, will displace the wire due to the spring restoring force.";
+msg += "\n5. Use linear regression to detemine the magnitude of the B-field.";
+alert(msg);
+}
+
+function layout(iValues) {
+ wireL=iValues[0];
+ Bfield=iValues[1];
+ NandS=iValues[2];
+
+ document.getElementById("wireL").addEventListener("change", function() {
+  wireL=Number(document.getElementById("wireL").value);
+  drawAll();});
+
+ document.getElementById("cable").addEventListener("change", function() {drawAll(iValues);});
+
+ document.getElementById("current").addEventListener("change", function() {drawAll(iValues);});
+
+ var powerButton = document.getElementById("power");
+ powerButton.onclick = function(e) {
+  if (powerButton.value == "OFF") {
+   powerButton.value = "ON";
+   if (document.getElementById("current").disabled==true) document.getElementById("current").value=iValues[4];
+  }
+  else {
+   powerButton.value = "OFF";
+   document.getElementById("current").value=0;
+  }
+  drawAll();
+ };
+
+ drawAll()
+}
+
+function drawAll(){
+ ctx.clearRect(0,0,cw,ch);
+ 
+ var current=document.getElementById("current").value;
+ var xoL=ccX-wireL/2, xoR=ccX+wireL/2;
+
+ var springL=200;
+ if (document.getElementById("power").value == "ON") { 
+  if ((NandS == 0 && document.getElementById("cable").value == "parallel") || (NandS == 1 && document.getElementById("cable").value == "cross")) springL=200+Bfield*current*wireL/1000;
+  else springL=200-Bfield*current*wireL/1000;
+ }
+
+ var magnets={color: ["#ffb3b3", "#00f8"], symbol: "⊗"};
+ if (NandS == 1) magnets={color: ["#b3b3ff", "#f008"], symbol: "⊙"}; 
+
+ ctx.beginPath();
+ ctx.fillStyle=magnets.color[0];
+ ctx.fillRect(ccX-370, ccY+290.5, 700, 250);
+ ctx.strokeStyle="black";
+ ctx.rect(ccX-370, ccY+290.5, 700, 250);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.fillStyle="black";
+
+ ctx.font="normal 12px Palatino Linotype";
+ ctx.textAlign="right";
+ for (let y=ccY+240; y<ccY+550; y+= 5) {
+  ctx.moveTo(ccX, y+0.5);
+  if ((y-460)%100 == 0) {
+   ctx.lineTo(ccX+50,y+0.5);
+   ctx.fillText(y-460, ccX-5, y+5.5);
+  }
+  else if ((y-460)%50 == 0) ctx.lineTo(ccX+40,y+0.5);
+  else if ((y-460)%10 == 0) ctx.lineTo(ccX+30,y+0.5);
+  else ctx.lineTo(ccX+20,y+0.5);
+  ctx.stroke();
+ }
+ ctx.fillText("(mm)", ccX, ccY+240);
+
+ ctx.beginPath();
+ ctx.fillStyle="#aaa"; ctx.fillRect(ccX-300.5, ccY-0.5, 600, 20); ctx.strokeStyle="black"; ctx.rect(ccX-300.5, ccY-0.5, 600, 20); ctx.stroke();
+
+ ctx.beginPath();
+ ctx.strokeStyle="#000";
+
+ var x0 = xoL;
+ var y0 = ccY+10;
+ var r=50;
+ var az=0.25
+ ctx.moveTo(x0, y0);
+ ctx.lineTo(x0, 20+r*az+y0);
+
+ var a, x, y, z;
+ for (let j=0; j<springL; j++) {
+  a = 20*Math.PI*j/(springL-1)
+  x = r*Math.sin(a);
+  y = r*Math.cos(a);
+  z = j;
+  ctx.lineTo(x+x0, 20+y*az+z+y0);
+ }
+ ctx.lineTo(x0, 20+y0+r*az+springL-1)
+ ctx.lineTo(x0, 200+y0+springL)
+ ctx.stroke();
+
+ var x0 = xoR;
+ var y0 = ccY+10;
+ var r=50;
+ var az=0.25
+ ctx.moveTo(x0, y0);
+ ctx.lineTo(x0, 20+r*az+y0);
+
+ var a, x, y, z;
+ for (let j=0; j<springL; j++) {
+  a = 20*Math.PI*j/(springL-1);
+  x = r*Math.sin(a);
+  y = r*Math.cos(a);
+  z = j;
+  ctx.lineTo(x+x0, 20+y*az+z+y0);
+ }
+ ctx.lineTo(x0, 20+y0+r*az+springL-1)
+ ctx.lineTo(x0, 200+y0+springL)
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.moveTo(xoL, 200.5+y0+springL);
+ ctx.lineTo(xoR, 200.5+y0+springL);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.fillStyle=magnets.color[1]
+ ctx.fillRect(ccX-330, ccY+280.5, 700, 250);
+ ctx.strokeStyle="black";
+ ctx.rect(ccX-330, ccY+280.5, 700, 250);
+ ctx.stroke();
+ ctx.font="normal 32px Palatino Linotype";
+ ctx.textAlign="left";
+ ctx.fillText(magnets.symbol, ccX+335, ccY+410);
+ ctx.font="italic 32px Palatino Linotype";
+ ctx.fillText("B", ccX+340, ccY+440);
+
+ ctx.beginPath();
+ ctx.fillStyle="#99ccff";
+ ctx.fillRect(ccX+340, ccY-0.5, 300, 100);
+ ctx.strokeStyle="black";
+ ctx.rect(ccX+340, ccY-0.5, 300, 100);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.fillStyle="white";
+ ctx.fillRect(ccX+390, ccY+30.5, 200, 40);
+
+ ctx.fillStyle="black";
+ ctx.font="normal 14px Palatino Linotype";
+ ctx.textAlign="left";
+ ctx.fillText("DC Current Power supply", ccX+350, ccY+95.5);
+
+
+ ctx.beginPath();
+ ctx.lineWidth=3;
+ ctx.strokeStyle="black"; 
+ if (document.getElementById("power").value == "ON") {
+  ctx.strokeStyle="red";
+  ctx.font="normal 24px Palatino Linotype";
+  ctx.textAlign="center";
+  ctx.fillText(current+" A", ccX+490, ccY+57.5);
+ }
+
+ ctx.moveTo(ccX+400, ccY+9.5); ctx.lineTo(ccX+400, ccY-19.5);
+ ctx.lineTo(ccX+290.5, ccY-19.5); ctx.lineTo(ccX+290.5, ccY+9.5);
+ ctx.lineTo(xoR, ccY+9.5); ctx.stroke();
+
+ ctx.moveTo(ccX+580, ccY+9.5); ctx.lineTo(ccX+580, ccY-29.5);
+ ctx.lineTo(ccX-290.5, ccY-29.5);  ctx.lineTo(ccX-290.5, ccY+9.5);
+ ctx.lineTo(xoL, ccY+9.5); ctx.stroke();
+
+ ctx.lineWidth=1;
+
+ ctx.beginPath();
+ ctx.fillStyle="white";
+ ctx.strokeStyle="black";
+ ctx.arc(ccX-290.5, ccY+9.5, 8, 0, 2*Math.PI);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.arc(ccX+290.5, ccY+9.5, 8, 0, 2*Math.PI);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.arc(ccX+400.5, ccY+9.5, 8, 0, 2*Math.PI);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.arc(ccX+580.5, ccY+9.5, 8, 0, 2*Math.PI);
+ ctx.fill();
+ ctx.stroke();
+
+
+ ctx.fillStyle="red";
+ ctx.font="normal 28px Palatino Linotype";
+ ctx.textAlign="center";
+ if (document.getElementById("cable").value == "parallel") ctx.fillText("+", ccX+400.5, ccY+17.5);
+ else ctx.fillText("+", ccX+580.5, ccY+17.5);
+}</script>\n</body>\n</html>
