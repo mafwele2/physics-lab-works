@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Virtual Lab Faraday_Law12225253 ABDURASULOV MIRSAID ALIMARDONOVICH_(미르사이드)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<center><h4>Virtual Lab Faraday_Law12225253 ABDURASULOV MIRSAID ALIMARDONOVICH_(미르사이드)</h4></center>	<input type="button" onclick="javascript:display_Q0();" value="Q-1" /> &emsp;
+	<input type="button" onclick="javascript:display_Q1();" value="Q-2" /> &emsp;
+	<input type="button" onclick="javascript:display_Q2();" value="Q-3" /> &emsp;
+&#8592; Select one button. &nbsp; 
+f (Hz): <input type="number" id="frequency" value=0 STYLE="font-size:18px;" min=0 max=200>
+I<sub>o</sub> (mA): <input type="number" id="Io" value=0 STYLE="font-size:18px;" min=0 max=200>
+Generator Power: <input type="button" id="power" value="OFF" STYLE="background-color: #cce000;">
+Oscilloscope Volts/div: <select id="voltsDiv">
+  <option value="1" selected>1 mV</option>
+  <option value="2">2 mV</option>
+  <option value="5">5 mV</option>
+  <option value="10">10 mV</option>
+  <option value="20">20 mV</option>
+</select>
+Time/div: <select id="timeDiv">
+  <option value="0.001">1 ms</option>
+  <option value="0.005">5 ms</option>
+  <option value="0.01">10 ms</option>
+  <option value="0.05">50 ms</option>
+</select>&nbsp; 
+<input type="button" id="pauseBtn" value="help" onclick="displayHelp();"> <a href="http://hyperphysics.phy-astr.gsu.edu/hbase/electric/farlaw.html" target="_blank">Faraday's Law</a><hr><div id="Qs"></div>
+<canvas id="canvas"></body></head><script type="application/javascript">
+var cnvs = document.getElementById("canvas");
+var ctx = cnvs.getContext("2d");
+ctx.canvas.width=window.innerWidth-20;
+ctx.canvas.height=window.innerHeight-130;
+var cw=cnvs.width, ch=cnvs.height;
+var q = document.getElementById("Qs");
+function display_Q0() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">1. Measure the induced EMF as a function of primary current. </p>';
+layout([837, 557, 102, 306, 58, 30]);
+}
+
+function display_Q1() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">2. Measure the induced EMF as a function of frequency. </p>';
+layout([817, 445, 87, 340, 63, 22]);
+}
+
+function display_Q2() {
+q.innerHTML = '<font size="3px"> <p style="background-color: #eee;">3. Determine the total number of secondary coil turns and compare it with the given value. </p>';
+layout([898, 588, 93, 284, 63, 22]);
+}
+
+var canvasImage;
+var coils = {"1":[830, 350, 110], "2":[940, 100, 40]};
+var ccX=100*parseInt(cw/200)+50, pwrXo=0, oscXo=0, oscYo=0;
+
+apparatus();
+
+ctx.beginPath();
+ctx.fillStyle="pink";
+ctx.strokeStyle="black";
+ctx.textAlign="center";
+ctx.font="normal 40px Palatino Linotype";
+ctx.fillText("Welcome to the Virtual Lab of Faraday's Law", cw/2, ch-150);
+ctx.strokeText("Welcome to the Virtual Lab of Faraday's Law", cw/2, ch-150);
+ctx.fillText("Integrated System & Engineering", cw/2, ch-100);
+
+
+
+function layout(iValues) {
+ coils = {"1":[iValues[0], iValues[1], iValues[2]], "2":[iValues[3], iValues[4], iValues[5]]}
+ apparatus();
+
+ document.getElementById("frequency").addEventListener("change", function() {drawAll();});
+ document.getElementById("Io").addEventListener("change", function() {drawAll();});
+ document.getElementById("voltsDiv").addEventListener("change", function() {drawAll();});
+ document.getElementById("timeDiv").addEventListener("change", function() {drawAll();});
+
+ var powerButton = document.getElementById("power");
+ powerButton.onclick = function(e) {
+  if (powerButton.value == "OFF") powerButton.value = "ON";
+  else powerButton.value = "OFF";
+  drawAll();
+ };
+
+ drawAll();
+}
+
+function displayHelp() {
+var msg="1. Select one button on the top left corner to start Virtual lab.";
+msg += "\n2. Each work requires different task.";
+msg += "\n3. Use user interfaces to turn the sine wave generator on and to change values.";
+msg += "\n4. The specifications of 2 coils will be randomly chosen and cannot be changed.";
+alert(msg);
+}
+
+function drawAll() {
+ ctx.putImageData(canvasImage,0,0);
+
+ var freq = Number(document.getElementById("frequency").value), Io = Number(document.getElementById("Io").value), tmDiv = Number(document.getElementById("timeDiv").value), ch2Div = Number(document.getElementById("voltsDiv").value), e2 = 4e-10*coils["2"][0]*coils["1"][0]/coils["1"][1]*(coils["2"][2]*Math.PI)**2*Io*freq*2*Math.PI, k=freq*2*Math.PI*tmDiv/10;
+
+ if (document.getElementById("power").value == "ON") {
+  ctx.beginPath();
+  ctx.strokeStyle="black";
+  ctx.lineWidth=3;
+  ctx.moveTo(pwrXo+130, 305);
+  ctx.lineTo(pwrXo+180, 305);
+  ctx.stroke();
+  ctx.lineWidth=1;
+
+  ctx.beginPath();
+  ctx.fillStyle="black";
+  ctx.font="normal 18px Palatino Linotype";
+  ctx.textAlign="center";
+  ctx.fillText(freq, pwrXo+160,390);
+  ctx.fillText(Io, pwrXo+160, 440);
+ 
+  ctx.beginPath();
+  ctx.strokeStyle="black";
+  //ctx.moveTo(ccX+280, 390);
+  ctx.moveTo(oscXo-130, oscYo+140);
+  for (let x=0; x<200; x++) {
+   //tmp=10/ch2Div*e2*Math.cos(k*x)+390+Math.random()*3-1.5;
+   //if (290<=tmp && tmp<=490) ctx.lineTo(ccX+280+x, tmp);
+   //else if (tmp<290) ctx.lineTo(ccX+280+x, 290);
+   //else ctx.lineTo(ccX+280+x, 490);
+   tmp=10/ch2Div*e2*Math.cos(k*x)+oscYo+140+Math.random()*3-1.5;
+   if (oscYo+40<=tmp && tmp<=oscYo+240) ctx.lineTo(oscXo-130+x, tmp);
+   else if (tmp<oscYo+40) ctx.lineTo(oscXo-130+x, oscYo+40);
+   else ctx.lineTo(oscXo-130+x, oscYo+240);
+   ctx.stroke();
+  }
+ }
+ else {
+  ctx.beginPath();
+  ctx.strokeStyle="black";
+  ctx.lineWidth=3;
+  ctx.moveTo(pwrXo+130, 305);
+  ctx.lineTo(pwrXo+180, 285);
+  ctx.stroke();
+  ctx.lineWidth=1;
+ }
+}
+
+function apparatus() {
+ ctx.clearRect(0,0,cw,ch);
+
+ ctx.beginPath();
+ ctx.fillStyle="black";
+ ctx.font="normal 14px Palatino Linotype";
+ ctx.textAlign="center";
+ ctx.fillText("N = "+coils["1"][0], 120,50);
+ ctx.fillText("L = "+coils["1"][1]+" (mm)", 120, 65);
+ ctx.fillText("r = "+coils["1"][2]+" (mm)", 120, 80);
+
+ ctx.fillStyle="red";
+ ctx.fillText("N = "+coils["2"][0], 120,170);
+ ctx.fillText("L = "+coils["2"][1]+" (mm)", 120,185);
+ ctx.fillText("r = "+coils["2"][2]+" (mm)", 120,200);
+ 
+ ctx.fillStyle="black";
+ ctx.font="normal 18px Palatino Linotype";
+ ctx.fillText("Front view of coils", 120, 260);
+
+ var x0, y0, L, r, az=0.25;
+ ctx.beginPath();
+ ctx.strokeStyle="#f008";
+ ctx.lineWidth=4;
+ L=coils["2"][1], r=coils["2"][2], x0 = ccX-L/2, y0 = 120;
+
+ oscXo=ccX+410, oscYo=280;
+
+ ctx.moveTo(oscXo, oscYo);
+ ctx.lineTo(oscXo, r+y0+20);
+ ctx.lineTo(x0, r+y0+20);
+ ctx.lineTo(x0, r+y0);
+ for (let j=0; j<L-0.75; j+=0.25) {
+  a = 20*Math.PI*j/(L-1);
+  x = r*Math.sin(a);
+  y = r*Math.cos(a);
+  z = j;
+  ctx.lineTo(x*az+z+x0, y+y0);
+ }
+ ctx.lineTo(oscXo+40, r+y0);
+ ctx.lineTo(oscXo+40, oscYo);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.arc(120,120,r, 0, 2*Math.PI);
+ ctx.stroke();
+ ctx.lineWidth=1;
+
+ ctx.beginPath();
+ ctx.strokeStyle="#0008";
+ ctx.lineWidth=4;
+ L=coils["1"][1], r=coils["1"][2], x0 = ccX-L/2-30, y0 = 120;
+
+ var a, x, y, z;
+ ctx.moveTo(ccX-380, 250);
+ ctx.lineTo(x0, 250);
+ ctx.lineTo(x0, r+y0);
+ ctx.lineTo(20+x0, r+y0);
+ for (let j=0; j<L-0.5; j+=0.5) {
+  a = 60*Math.PI*j/(L-1);
+  x = r*Math.sin(a);
+  y = r*Math.cos(a);
+  z = j;
+  ctx.lineTo(20+x*az+z+x0, y+y0);
+ }
+ ctx.lineTo(21+x0+L, r+y0);
+ ctx.lineTo(30+x0+L, r+y0);
+ ctx.lineTo(30+x0+L, 260);
+ ctx.lineTo(ccX-182, 260);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.arc(120,120,r, 0, 2*Math.PI);
+ ctx.stroke();
+
+ ctx.lineWidth=1;
+
+ ctx.strokeStyle="white";
+ ctx.moveTo(x0+2.5, r+y0-0.5);
+ ctx.lineTo(22.5+x0, r+y0-0.5);
+ for (let j=0; j<L; j++) {
+  a = 60*Math.PI*j/(L-1);
+  x = r*Math.sin(a);
+  y = r*Math.cos(a);
+  z = j;
+  ctx.lineTo(22.5+x*az+z+x0, y+y0-0.5);
+ }
+ ctx.stroke();
+
+ pwrXo=ccX-400;
+ ctx.beginPath();
+ ctx.fillStyle="#ffdf80";
+ ctx.fillRect(pwrXo, 280, 240, 180);
+ 
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ ctx.font="normal 18px Palatino Linotype";
+ ctx.fillText("Sine wave generator", pwrXo+120, 345);
+ ctx.fillText("Frequency", pwrXo+50, 390);
+ ctx.fillText("Io", pwrXo+50, 440);
+
+ ctx.fillText("Hz", pwrXo+220, 390);
+ ctx.fillText("mA", pwrXo+220, 440);
+
+ ctx.beginPath();
+ ctx.fillStyle="white";
+ ctx.fillRect(pwrXo+100, 360, 100, 40);
+ ctx.fillRect(pwrXo+100, 410, 100, 40);
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.lineWidth=3;
+ ctx.moveTo(pwrXo+180, 305);
+ ctx.lineTo(pwrXo+220, 305);
+ ctx.lineTo(pwrXo+220, 260);
+ ctx.stroke();
+
+ ctx.moveTo(pwrXo+130, 305);
+ ctx.lineTo(pwrXo+20, 305);
+ ctx.lineTo(pwrXo+20, 250);
+ ctx.stroke();
+ ctx.lineWidth=1;
+ 
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.arc(pwrXo+180,305,9,0, 2*Math.PI);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.arc(pwrXo+60,305,9,0, 2*Math.PI);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.arc(pwrXo+130,305,9,0, 2*Math.PI);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.arc(pwrXo+95,305, 20,0, 2*Math.PI);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.fillStyle="black";
+ ctx.font="normal 40px Palatino Linotype";
+ ctx.fillText("⏦", pwrXo+95, 320);
+
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.fillStyle="#b3ccff";
+ ctx.rect(oscXo-140, oscYo, 220, 260);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.fillStyle="black";
+ ctx.textAlign="center";
+ ctx.font="normal 18px Palatino Linotype";
+ ctx.fillText("Oscilloscope", oscXo-30, oscYo+30);
+ 
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.fillStyle="white";
+ ctx.rect(oscXo-130, oscYo+40, 200, 200);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.fillStyle="white";
+ ctx.arc(oscXo,oscYo,9,0, 2*Math.PI);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.arc(oscXo+40,oscYo,9,0, 2*Math.PI);
+ ctx.fill();
+ ctx.stroke();
+
+ ctx.strokeStyle="black";
+ for (let c = oscXo-120; c < oscXo+70; c += 10) {
+   if ((c-oscXo+130)%50 == 0) {
+   ctx.beginPath();
+   ctx.setLineDash([5,5]);
+   ctx.moveTo(c+0.5,oscYo+40);
+   ctx.lineTo(c+0.5,oscYo+240);
+   ctx.stroke();
+  }
+  else {
+   ctx.beginPath();
+   ctx.setLineDash([2,2]);
+   ctx.moveTo(c+0.5,oscYo+40);
+   ctx.lineTo(c+0.5,oscYo+240);
+   ctx.stroke();
+  }
+ }
+
+ for (let r = oscYo+50; r < oscYo+240; r+=10) {
+  if ((r-oscYo-240)%50 == 0) {
+   ctx.beginPath();
+   ctx.setLineDash([5,5]);
+   ctx.moveTo(oscXo-130,r+0.5);
+   ctx.lineTo(oscXo+70, r+0.5);
+   ctx.stroke();
+  }
+  else {
+   ctx.beginPath();
+   ctx.setLineDash([2,2]);
+   ctx.moveTo(oscXo-130,r+0.5);
+   ctx.lineTo(oscXo+70, r+0.5);
+   ctx.stroke();
+  }
+ }
+ ctx.setLineDash([]);
+
+ canvasImage=ctx.getImageData(0,0,cw,ch);
+}</script>\n</body>\n</html>
